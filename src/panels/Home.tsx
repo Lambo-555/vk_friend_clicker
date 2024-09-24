@@ -10,7 +10,6 @@ import {
   Avatar,
   NavIdProps,
   List,
-  ScreenSpinner,
 } from '@vkontakte/vkui';
 import bridge, { UserGetFriendsFriend, UserInfo } from '@vkontakte/vk-bridge';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
@@ -19,10 +18,10 @@ export interface HomeProps extends NavIdProps {
   // fetchedUser?: UserInfo;
   // fetchFriends?: { users: UserGetFriendsFriend[] };
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
-  setUserId: React.Dispatch<React.SetStateAction<ReactNode>>,
+  setUserId: React.Dispatch<React.SetStateAction<number | null>>,
 }
 
-export const Home: FC<HomeProps> = ({ id, setPopout, setUserId }) => {
+export const Home: FC<HomeProps> = ({ id, setUserId }) => {
   const [fetchedUsers, setFetchedUsers] = useState<UserInfo[]>([]);
   const [fetchedPoints, setFetchedPoints] = useState<{ [key: number]: number }>({});
   const routeNavigator = useRouteNavigator();
@@ -66,6 +65,7 @@ export const Home: FC<HomeProps> = ({ id, setPopout, setUserId }) => {
         key: 'friendList',
         value: JSON.stringify(idsToSave),
       });
+      console.log(!!update);
       return idsToSave;
     } catch (error) {
       console.error(error);
@@ -84,6 +84,7 @@ export const Home: FC<HomeProps> = ({ id, setPopout, setUserId }) => {
         key: 'friendList',
         value: JSON.stringify(idsToSave),
       });
+      console.log(!!update);
       return idsToSave;
     } catch (error) {
       console.error(error);
@@ -98,9 +99,11 @@ export const Home: FC<HomeProps> = ({ id, setPopout, setUserId }) => {
       }
 
       if (ids.length === 1) {
+        // @ts-ignore
         const user: UserInfo = await bridge.send('VKWebAppGetUserInfo', { user_ids: ids.join(',') });
         return [user];
       } else {
+        // @ts-ignore
         const users: { result: UserInfo[] } = await bridge.send('VKWebAppGetUserInfo', { user_ids: ids.join(',') });
         return users.result;
       }

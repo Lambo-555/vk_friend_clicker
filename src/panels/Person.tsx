@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Image, Group, Counter, ScreenSpinner, SimpleCell, FormItem, Progress, CellButton, Div } from '@vkontakte/vkui';
+import { NavIdProps, Panel, PanelHeader, PanelHeaderBack, Group, SimpleCell, FormItem, Progress, CellButton } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import { routes } from '../routes';
@@ -23,6 +23,7 @@ export const Person: FC<PersonProps> = ({ id, setPopout, userId }) => {
 
   const vkGetUser = async (id: number): Promise<UserInfo | undefined> => {
     try {
+      // @ts-ignore
       const user: UserInfo = await bridge.send('VKWebAppGetUserInfo', { user_ids: id.toString() });
       return user;
     } catch (error) {
@@ -86,7 +87,9 @@ export const Person: FC<PersonProps> = ({ id, setPopout, userId }) => {
     const loadUser = async () => {
       if (!userId) return;
       const userData = await vkGetUser(userId);
-      setUser(userData);
+      if (userData) {
+        setUser(userData);
+      }
     }
 
     const loadUserPoints = async () => {

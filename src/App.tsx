@@ -15,7 +15,7 @@ export const App = () => {
     <SplitLayout popout={popout}>
       <SplitCol>
         <View activePanel={activePanel}>
-          <Home id="home" setPopout={setPopout} setUserId={setUserId} />
+          <Home id="home" setPopout={setPopout} setUserId={setUserId}/>
           <Person id="person" setPopout={setPopout} userId={userId}/>
           <Persik id="persik" />
         </View>
