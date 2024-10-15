@@ -13,6 +13,8 @@ import {
 } from '@vkontakte/vkui';
 import bridge, { UserGetFriendsFriend, UserInfo } from '@vkontakte/vk-bridge';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import FriendService from '../utils/FriendService';
+import { RegisterUserDto } from '../utils/types';
 
 export interface HomeProps extends NavIdProps {
   // fetchedUser?: UserInfo;
@@ -22,115 +24,150 @@ export interface HomeProps extends NavIdProps {
 }
 
 export const Home: FC<HomeProps> = ({ id, setUserId }) => {
-  const [fetchedUsers, setFetchedUsers] = useState<UserInfo[]>([]);
-  const [fetchedPoints, setFetchedPoints] = useState<{ [key: number]: number }>({});
+  const [friendList, setFriendList] = useState<RegisterUserDto[]>([]);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
+
   const routeNavigator = useRouteNavigator();
 
-  const getStorageFriendIds = async (): Promise<number[]> => {
-    try {
-      const data: { keys: { key: string; value: string; }[]; } = await bridge.send('VKWebAppStorageGet', {
-        keys: ['friendList'],
-      });
-      const ids = JSON.parse(data?.keys?.[0]?.value) || [];
-      return ids;
-    } catch (error) {
-      console.error(error);
-    }
-    return [];
-  }
+  useEffect(() => {
+    const getVkUser = async () => {
+      const { vk_user_id } = await bridge.send('VKWebAppGetLaunchParams');
+      if (vk_user_id) {
+        setCurrentUserId(vk_user_id);
+        getUserFriendList(vk_user_id);
+        let vkUser = await FriendService.getUser(vk_user_id);
+        if (!vkUser) {
+          // @ts-ignore
+          const user: UserInfo = await bridge.send('VKWebAppGetUserInfo', { user_ids: vk_user_id.toString() });
 
-  const getStorageFriendPoint = async (id: number): Promise<number> => {
-    try {
-      const data: { keys: { key: string; value: string; }[]; } = await bridge.send('VKWebAppStorageGet', {
-        keys: [id.toString()],
-      });
-      const points = data.keys[0].value;
-      if (points) {
-        return +points;
+          if (user) {
+            vkUser = await FriendService.registerUser({
+              first_name: user.first_name,
+              last_name: user.last_name,
+              photo_200: user.photo_200,
+              vk_user_id: user.id,
+              city: user?.city?.title || 'Город', 
+            });
+          }
+        }
       }
-    } catch (error) {
-      console.error(error);
     }
-    return 0;
-  }
 
-  const addStorageFriendIds = async (idsToAdd: number[]): Promise<number[]> => {
-    try {
-      const data: { keys: { key: string; value: string; }[]; } = await bridge.send('VKWebAppStorageGet', {
-        keys: ['friendList'],
-      });
-      const existedIds = JSON.parse(data?.keys?.[0]?.value) || [];
-      const idsToSave: number[] = Array.from(new Set([...existedIds, ...idsToAdd]));
-      const update: { result: boolean } = await bridge.send('VKWebAppStorageSet', {
-        key: 'friendList',
-        value: JSON.stringify(idsToSave),
-      });
-      console.log(!!update);
-      return idsToSave;
-    } catch (error) {
-      console.error(error);
+    const getUserFriendList = async (vk_user_id: number) => {
+      const getVkUserFriends = await FriendService.getFriendList(vk_user_id);
+      console.log('getVkUserFriends:::', getVkUserFriends);
+      setFriendList(getVkUserFriends);
     }
-    return [];
-  }
 
-  const deleteStorageFriendIds = async (idsToRemove: number[]): Promise<number[]> => {
-    try {
-      const data: { keys: { key: string; value: string; }[]; } = await bridge.send('VKWebAppStorageGet', {
-        keys: ['friendList'],
-      });
-      const existedIds: number[] = JSON.parse(data?.keys?.[0]?.value) || [];
-      const idsToSave = existedIds.filter(item => !idsToRemove.includes(item));
-      const update: { result: boolean } = await bridge.send('VKWebAppStorageSet', {
-        key: 'friendList',
-        value: JSON.stringify(idsToSave),
-      });
-      console.log(!!update);
-      return idsToSave;
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  }
+    getVkUser();
+  }, [])
 
-  const vkGetUsers = async (ids: number[]): Promise<UserInfo[]> => {
+  const vkGetUsers = async (ids: number[]): Promise<RegisterUserDto[]> => {
     try {
       if (!ids.length) {
         return [];
       }
 
       if (ids.length === 1) {
+        const dbUser = await FriendService.getUser(ids[0]);
+        if (dbUser) {
+          return [dbUser];
+        }
+
         // @ts-ignore
         const user: UserInfo = await bridge.send('VKWebAppGetUserInfo', { user_ids: ids.join(',') });
-        return [user];
-      } else {
-        // @ts-ignore
-        const users: { result: UserInfo[] } = await bridge.send('VKWebAppGetUserInfo', { user_ids: ids.join(',') });
-        return users.result;
+        if (user) {
+          const registerUser = await FriendService.registerUser({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            photo_200: user.photo_200,
+            vk_user_id: user.id,
+            city: user?.city?.title || 'Город',
+          });
+          return [registerUser];
+        }
       }
+
+      if (ids.length) {
+        // смотрим кто зареган а кто нет, тащим данные из базы
+        const dbUserList = [];
+
+        // если в базе такого айди нет, то составляем список на регистрацию
+        const nonDbUserList = [];
+
+        for (let id of ids) {
+          const dbUser = await FriendService.getUser(id);
+          if (dbUser) {
+            dbUserList.push(dbUser);
+          } else {
+            nonDbUserList.push(id)
+          }
+        }
+
+        if (nonDbUserList.length) {
+          // @ts-ignore
+          const users: { result: UserInfo[] } = await bridge.send('VKWebAppGetUserInfo', { user_ids: nonDbUserList.join(',') });
+          console.log('VK request users', users);
+          // регистрация тех, кого пока нет в базе
+          for (let user of users?.result) {
+            const registerUser = await FriendService.registerUser({
+              first_name: user.first_name,
+              last_name: user.last_name,
+              photo_200: user.photo_200,
+              vk_user_id: user.id,
+              city: user?.city?.title || 'Город',
+            });
+            dbUserList.push(registerUser);
+          }
+
+          return dbUserList;
+        }
+      }
+
     } catch (error) {
       console.error(error);
     }
+
     return [];
   }
 
   const handleChooseFriend = async (): Promise<void> => {
     try {
-      const userListData: { users: UserGetFriendsFriend[] } = await bridge.send('VKWebAppGetFriends', { multi: true });
-      if (!userListData) return;
-      const ids = userListData.users.map(item => item.id);
-      await addStorageFriendIds(ids);
-      const users: UserInfo[] = await vkGetUsers(ids);
-      if (!users?.length) return;
-      setFetchedUsers(fetchedUsers.concat(users));
+      const data: { users: UserGetFriendsFriend[] } = await bridge.send('VKWebAppGetFriends', { multi: true });
+      if (!data) return;
+      if (!currentUserId) return;
+
+      const usersToShow: RegisterUserDto[] = [];
+      for (let vkFriend of data.users) {
+        let userDb = await FriendService.getVkUser(vkFriend.id);
+        if (!userDb) {
+          userDb = await FriendService.registerUser({
+            first_name: vkFriend.first_name,
+            last_name: vkFriend.last_name,
+            photo_200: vkFriend.photo_200,
+            vk_user_id: vkFriend.id,
+            city: 'city',
+          });
+        }
+
+        if (userDb?.id) {
+          usersToShow.push(userDb);
+          const result = await FriendService.addFriend({
+            vkId: currentUserId,
+            friendVkId: userDb.vk_user_id,
+          });
+          if (!result) {
+            console.error('friend not added');
+          }
+        }
+      }
+      setFriendList(prev => [...prev, ...usersToShow]);
     } catch (error) {
       console.error(error);
     }
   }
 
-  const handleDeleteUser = async (id: number): Promise<void> => {
-    await deleteStorageFriendIds([id]);
-    setFetchedUsers(fetchedUsers.filter(item => item.id !== id))
-  }
+  const handleDeleteUser = async (id: number): Promise<void> => { }
 
   // EXAMPLE
   // useEffect(() => {
@@ -139,29 +176,6 @@ export const Home: FC<HomeProps> = ({ id, setUserId }) => {
   // deleteStorageFriendIds([827631882]);
   // vkGetUsers([4790523, 827631882, 43658183]);
   // }, [])
-
-  useEffect(() => {
-    const loadUsers = async () => {
-      const ids: number[] = await getStorageFriendIds();
-      if (!ids.length) return;
-
-      const users: UserInfo[] = await vkGetUsers(ids);
-      if (!users.length) return;
-
-      for await (const idOfUser of ids) {
-        const points = await getStorageFriendPoint(idOfUser);
-        setFetchedPoints(prev => {
-          prev[idOfUser] = points
-          return prev;
-        })
-        console.log(idOfUser, points, fetchedPoints);
-      }
-
-      setFetchedUsers(users);
-    }
-
-    loadUsers();
-  }, []);
 
   return (
     <Panel id={id}>
@@ -179,16 +193,16 @@ export const Home: FC<HomeProps> = ({ id, setUserId }) => {
       </Group>
 
       <List>
-        {fetchedUsers?.map(user => (
+        {friendList?.map(user => (
           <Cell
             key={user.id}
             mode="removable"
-            onRemove={() => handleDeleteUser(user.id)}
+            onRemove={() => handleDeleteUser(user.vk_user_id)}
             before={user.photo_200 && <Avatar src={user.photo_200} />}
-            subtitle={user?.city?.title}
-            indicator={fetchedPoints[user.id] || 0}
+            // subtitle={user?.city}
+            // indicator={user.taps}
             onClick={() => {
-              setUserId(user.id);
+              setUserId(user.vk_user_id);
               routeNavigator.push('person');
             }}
           >

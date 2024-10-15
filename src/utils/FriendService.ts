@@ -1,28 +1,63 @@
 import axios from 'axios';
-import { FriendEntity, ModifierEntity } from './types';
+import { AddModToFriendDto, FriendAddDto, RegisterUserDto, TapUserFriendDto } from './types';
 
 const API_URL = 'http://localhost:3000'; // Update with your API URL
 
 class FriendService {
-    static async getAllFriendsWithPoints(playerId: string): Promise<FriendEntity[]> {
-        const response = await axios.get(`${API_URL}/friends/${playerId}`);
+    static async getUser(userId: number): Promise<RegisterUserDto> {
+        const response = await axios.get(`${API_URL}/friends/user/${userId}`);
         return response.data;
     }
 
-    static async getTotalPointsForAllFriends(playerId: string): Promise<number> {
-        const response = await axios.get(`${API_URL}/friends/${playerId}/totalPoints`);
+    static async getVkUser(vkUserId: number): Promise<RegisterUserDto> {
+        const response = await axios.get(`${API_URL}/friends/vk/${vkUserId}`); 
         return response.data;
     }
 
-    static async addPointsToFriend(playerId: string, friendId: number, pointsToAdd: number): Promise<FriendEntity> {
-        const response = await axios.post(`${API_URL}/friends/${playerId}/addPoints`, { friendId, pointsToAdd });
-        return response.data;
-    }
+    static async getFriendList(userId: number) { 
+        try {
+            const response = await axios.get(`${API_URL}/friends/friendList/${userId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching friend list:', error);
+        }
+    };
 
-    static async getAllModifiersForPlayer(playerId: string): Promise<ModifierEntity[]> {
-        const response = await axios.get(`${API_URL}/friends/${playerId}/modifiers`);
-        return response.data;
-    }
+    static async registerUser(data: RegisterUserDto) {
+        try {
+            const response = await axios.post(`${API_URL}/friends/register`, data);
+            return response.data;
+        } catch (error) {
+            console.error('Error adding friend:', error);
+        }
+    };
+
+    static async addFriend(data: FriendAddDto) {
+        try {
+            const response = await axios.post(`${API_URL}/friends/add`, data);
+            return response.data;
+        } catch (error) {
+            console.error('Error adding friend:', error);
+        }
+    };
+
+    static async tapUserFriend(data: TapUserFriendDto) {
+        try {
+            const response = await axios.post(`${API_URL}/friends/tap`, data);
+            return response.data;
+        } catch (error) {
+            console.error('Error tapping user friend:', error);
+        }
+    };
+
+    static async addModToFriend(data: AddModToFriendDto) {
+        try {
+            const response = await axios.post(`${API_URL}/friends/addMod`, data);
+            return response.data;
+        } catch (error) {
+            console.error('Error adding mod to friend:', error);
+        }
+    };
 }
 
 export default FriendService;
