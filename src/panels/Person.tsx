@@ -22,7 +22,7 @@ export const Person: FC<PersonProps> = ({ id, setPopout }) => {
 
   const routeNavigator = useRouteNavigator();
   const params = useParams<'vkuseridparam'>();
-  const vkUserId = params?.vkuseridparam;
+  const vkUserId: string | undefined = params?.vkuseridparam;
   // if (!vkUserId) return;
   console.log(vkUserId);
 
@@ -42,11 +42,12 @@ export const Person: FC<PersonProps> = ({ id, setPopout }) => {
     }
 
     const getVkFriend = async () => {
-      // if (!vkUserId) return;
-      const friend = await FriendService.getVkUser(+vkUserId!);
-      if (friend) {
-        setPoints(friend?.taps || 0)
-        setFriend(friend);
+      if (vkUserId) {
+        const friend = await FriendService.getVkUser(parseInt(vkUserId));
+        if (friend) {
+          setPoints(friend?.taps || 0)
+          setFriend(friend);
+        }
       }
     }
 

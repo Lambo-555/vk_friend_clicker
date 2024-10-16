@@ -31,6 +31,7 @@ export const Home: FC<HomeProps> = ({ id }) => {
   useEffect(() => {
     const getVkUser = async () => {
       const { vk_user_id } = await bridge.send('VKWebAppGetLaunchParams');
+      console.log('vk_user_idvk_user_idvk_user_id:::', vk_user_id);
       if (vk_user_id) {
         setCurrentUserId(vk_user_id);
         getUserFriendList(vk_user_id);
@@ -45,7 +46,7 @@ export const Home: FC<HomeProps> = ({ id }) => {
               last_name: user.last_name,
               photo_200: user.photo_200,
               vk_user_id: user.id,
-              city: user?.city?.title || 'Город', 
+              city: user?.city?.title || 'Город',
             });
           }
         }
@@ -54,7 +55,6 @@ export const Home: FC<HomeProps> = ({ id }) => {
 
     const getUserFriendList = async (vk_user_id: number) => {
       const getVkUserFriends = await FriendService.getFriendList(vk_user_id);
-      console.log('getVkUserFriends:::', getVkUserFriends);
       setFriendList(getVkUserFriends);
     }
 
@@ -64,34 +64,35 @@ export const Home: FC<HomeProps> = ({ id }) => {
   const handleChooseFriend = async (): Promise<void> => {
     try {
       const data: { users: UserGetFriendsFriend[] } = await bridge.send('VKWebAppGetFriends', { multi: true });
-      // if (!data) return;
-      // if (!currentUserId) return;
+      if (data) {
+        if (currentUserId) {
+          const usersToShow: RegisterUserDto[] = [];
+          for (let vkFriend of data.users) {
+            let userDb = await FriendService.getVkUser(vkFriend.id);
+            if (!userDb) {
+              userDb = await FriendService.registerUser({
+                first_name: vkFriend.first_name,
+                last_name: vkFriend.last_name,
+                photo_200: vkFriend.photo_200,
+                vk_user_id: vkFriend.id,
+                city: 'city',
+              });
+            }
 
-      const usersToShow: RegisterUserDto[] = [];
-      for (let vkFriend of data.users) {
-        let userDb = await FriendService.getVkUser(vkFriend.id);
-        if (!userDb) {
-          userDb = await FriendService.registerUser({
-            first_name: vkFriend.first_name,
-            last_name: vkFriend.last_name,
-            photo_200: vkFriend.photo_200,
-            vk_user_id: vkFriend.id,
-            city: 'city',
-          });
-        }
-
-        if (userDb?.id) {
-          usersToShow.push(userDb);
-          const result = await FriendService.addFriend({
-            vkId: currentUserId!,
-            friendVkId: userDb.vk_user_id,
-          });
-          if (!result) {
-            console.error('friend not added');
+            if (userDb?.id) {
+              usersToShow.push(userDb);
+              const result = await FriendService.addFriend({
+                vkId: currentUserId!,
+                friendVkId: userDb.vk_user_id,
+              });
+              if (!result) {
+                console.error('friend not added');
+              }
+            }
           }
+          setFriendList(prev => [...prev, ...usersToShow]);
         }
       }
-      setFriendList(prev => [...prev, ...usersToShow]);
     } catch (error) {
       console.error(error);
     }
