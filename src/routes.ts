@@ -21,7 +21,7 @@ export const routes = RoutesConfig.create([
     createView(DEFAULT_VIEW, [
       createPanel(DEFAULT_VIEW_PANELS.HOME, '/', []),
       createPanel(DEFAULT_VIEW_PANELS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}`, []),
-      createPanel(DEFAULT_VIEW_PANELS.PERSON, `/${DEFAULT_VIEW_PANELS.PERSON}`, []),
+      createPanel(DEFAULT_VIEW_PANELS.PERSON, `/${DEFAULT_VIEW_PANELS.PERSON}/:vkuseridparam`, []),
     ]),
   ]),
 ]);

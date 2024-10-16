@@ -9,14 +9,13 @@ import { Person } from './panels/Person';
 export const App = () => {
   const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME } = useActiveVkuiLocation();
   const [popout, setPopout] = useState<ReactNode | null>(null);
-  const [userId, setUserId] = useState<number | null>(null);
 
   return (
     <SplitLayout popout={popout}>
       <SplitCol>
         <View activePanel={activePanel}>
-          <Home id="home" setPopout={setPopout} setUserId={setUserId}/>
-          <Person id="person" setPopout={setPopout} userId={userId}/>
+          <Home id="home" setPopout={setPopout}/>
+          <Person id="person" setPopout={setPopout}/>
           <Persik id="persik" />
         </View>
       </SplitCol>

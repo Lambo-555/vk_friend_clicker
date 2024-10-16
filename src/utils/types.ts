@@ -5,6 +5,7 @@ export interface RegisterUserDto {
     last_name: string;
     photo_200: string;
     city: string;
+    taps?: number;
 }
 
 export interface FriendAddDto {

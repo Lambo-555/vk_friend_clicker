@@ -20,10 +20,9 @@ export interface HomeProps extends NavIdProps {
   // fetchedUser?: UserInfo;
   // fetchFriends?: { users: UserGetFriendsFriend[] };
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
-  setUserId: React.Dispatch<React.SetStateAction<number | null>>,
 }
 
-export const Home: FC<HomeProps> = ({ id, setUserId }) => {
+export const Home: FC<HomeProps> = ({ id }) => {
   const [friendList, setFriendList] = useState<RegisterUserDto[]>([]);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
@@ -62,80 +61,11 @@ export const Home: FC<HomeProps> = ({ id, setUserId }) => {
     getVkUser();
   }, [])
 
-  const vkGetUsers = async (ids: number[]): Promise<RegisterUserDto[]> => {
-    try {
-      if (!ids.length) {
-        return [];
-      }
-
-      if (ids.length === 1) {
-        const dbUser = await FriendService.getUser(ids[0]);
-        if (dbUser) {
-          return [dbUser];
-        }
-
-        // @ts-ignore
-        const user: UserInfo = await bridge.send('VKWebAppGetUserInfo', { user_ids: ids.join(',') });
-        if (user) {
-          const registerUser = await FriendService.registerUser({
-            first_name: user.first_name,
-            last_name: user.last_name,
-            photo_200: user.photo_200,
-            vk_user_id: user.id,
-            city: user?.city?.title || 'Город',
-          });
-          return [registerUser];
-        }
-      }
-
-      if (ids.length) {
-        // смотрим кто зареган а кто нет, тащим данные из базы
-        const dbUserList = [];
-
-        // если в базе такого айди нет, то составляем список на регистрацию
-        const nonDbUserList = [];
-
-        for (let id of ids) {
-          const dbUser = await FriendService.getUser(id);
-          if (dbUser) {
-            dbUserList.push(dbUser);
-          } else {
-            nonDbUserList.push(id)
-          }
-        }
-
-        if (nonDbUserList.length) {
-          // @ts-ignore
-          const users: { result: UserInfo[] } = await bridge.send('VKWebAppGetUserInfo', { user_ids: nonDbUserList.join(',') });
-          console.log('VK request users', users);
-          // регистрация тех, кого пока нет в базе
-          for (let user of users?.result) {
-            const registerUser = await FriendService.registerUser({
-              first_name: user.first_name,
-              last_name: user.last_name,
-              photo_200: user.photo_200,
-              vk_user_id: user.id,
-              city: user?.city?.title || 'Город',
-            });
-            dbUserList.push(registerUser);
-          }
-
-          return dbUserList;
-        }
-      }
-
-    } catch (error) {
-      console.error(error);
-    }
-
-    return [];
-  }
-
   const handleChooseFriend = async (): Promise<void> => {
     try {
       const data: { users: UserGetFriendsFriend[] } = await bridge.send('VKWebAppGetFriends', { multi: true });
-      if (!data) return;
-      if (!currentUserId) return;
+      // if (!data) return;
+      // if (!currentUserId) return;
 
       const usersToShow: RegisterUserDto[] = [];
       for (let vkFriend of data.users) {
@@ -153,7 +83,7 @@ export const Home: FC<HomeProps> = ({ id, setUserId }) => {
         if (userDb?.id) {
           usersToShow.push(userDb);
           const result = await FriendService.addFriend({
-            vkId: currentUserId,
+            vkId: currentUserId!,
             friendVkId: userDb.vk_user_id,
           });
           if (!result) {
@@ -193,17 +123,16 @@ export const Home: FC<HomeProps> = ({ id, setUserId }) => {
       </Group>
 
       <List>
-        {friendList?.map(user => (
+        {friendList?.map((user: RegisterUserDto) => (
           <Cell
             key={user.id}
-            mode="removable"
+            // mode="removable"
             onRemove={() => handleDeleteUser(user.vk_user_id)}
             before={user.photo_200 && <Avatar src={user.photo_200} />}
             // subtitle={user?.city}
-            // indicator={user.taps}
+            indicator={user?.taps || 0}
             onClick={() => {
-              setUserId(user.vk_user_id);
-              routeNavigator.push('person');
+              routeNavigator.push(`person/${user.vk_user_id}`);
             }}
           >
             {`${user.first_name} ${user.last_name}`}
