@@ -2,22 +2,22 @@ import { FC, ReactNode, useState, } from 'react';
 import { Button, ButtonGroup, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Separator, Spacing } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Icon28AccessibilityOutline, Icon28CarOutline, Icon28InfoOutline, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline } from '@vkontakte/icons';
-import { DEFAULT_VIEW_PANELS } from '../routes';
+import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
 
 export interface MainScreenProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
+  setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
 }
 
-export const MainScreen: FC<MainScreenProps> = ({ id, setPopout }) => {
+export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal }) => {
   const routeNavigator = useRouteNavigator();
 
   const handleGoToCarShop = () => routeNavigator.push(DEFAULT_VIEW_PANELS.CAR_SHOP_LIST);
   const handleGoToUserCarList = () => routeNavigator.push(DEFAULT_VIEW_PANELS.USER_CAR_LIST);
+  const handleShowOnboarding = () => setCurrentModal(DEFAULT_MODALS.WELCOME_1);
   const handleShowAds = () => { }
   const handleAddFriends = () => { }
-  const handleShowOnboarding = () => {
 
-  }
 
   return (
     <Panel id={id}>
@@ -51,10 +51,10 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout }) => {
               Посмотреть рекламу
             </Button>
             <ButtonGroup mode="horizontal" gap="m" stretched>
-              <Button before={<Icon28AccessibilityOutline />} onClick={() => { }} size="l" appearance="positive" stretched>
+              <Button before={<Icon28AccessibilityOutline />} onClick={handleShowOnboarding} size="l" appearance="positive" stretched>
                 Обучение
               </Button>
-              <Button before={<Icon28InfoOutline />} onClick={() => { }} size="l" appearance="positive" stretched>
+              <Button disabled before={<Icon28InfoOutline />} onClick={() => { }} size="l" appearance="positive" stretched>
                 О нас
               </Button>
             </ButtonGroup>
