@@ -28,3 +28,41 @@ export interface Mod {
     effect: number;
     friends?: any[];
 }
+
+// Car Entity
+export interface CarEntity {
+    id?: number;
+    name?: string;
+    price?: number;
+    imageNormalUrl?: string;
+    imageDamagedUrl?: string;
+  }
+  
+  // UserCar Entity
+  export interface UserCarEntity {
+    id?: number;
+    user?: UserEntity;
+    car?: CarEntity;
+    state?: number;
+    credits?: number;
+  }
+  
+  // UserFriend Entity
+  export interface UserFriendEntity {
+    id?: number;
+    mods?: Mod[];
+    user?: UserEntity;
+    friend?: UserEntity;
+  }
+  
+  // User Entity
+  export interface UserEntity {
+    id?: number;
+    first_name?: string;
+    last_name?: string;
+    photo_200?: string;
+    city?: string;
+    credits?: number;
+    vk_user_id?: number;
+    friends?: UserFriendEntity[];
+  }

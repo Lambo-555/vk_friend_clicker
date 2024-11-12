@@ -1,0 +1,1 @@
+export const API_URL = 'http://localhost:3000'; // TODO Update with your API URL

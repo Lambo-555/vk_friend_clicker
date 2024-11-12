@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AddModToFriendDto, FriendAddDto, Mod, RegisterUserDto, TapUserFriendDto } from './types';
 
-const API_URL = 'http://localhost:3000'; // Update with your API URL
+const API_URL = 'http://localhost:3000'; // TODO Update with your API URL
 
 class FriendService {
     static async getUser(userId: number): Promise<RegisterUserDto> {
