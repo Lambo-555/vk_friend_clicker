@@ -9,7 +9,7 @@ export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
 }
 
-const mockUserCar: CarEntity = { id: 999999999, name: 'Лага Копейка', price: 550, imageNormalUrl: '', imageDamagedUrl: '' };
+const mockUserCar: CarEntity = { id: 999999999, name: 'Грузится...', price: 0, imageNormalUrl: '', imageDamagedUrl: '' };
 
 export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   const [userCar, setUserCar] = useState<CarEntity | null>(mockUserCar);
@@ -19,7 +19,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   const routeNavigator = useRouteNavigator();
 
   const params = useParams<'userCarId'>();
-  const userCarId: string | undefined = params?.userCarId;
+  const userCarIdStr: string | undefined = params?.userCarId;
 
   useEffect(() => {
     setIsLoading(true);
@@ -44,15 +44,20 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       setIsLoading(false);
       return;
     }
-    const getUserCarList = async () => {
-      const result: CarEntity[] = await ApiService.getUserCarList(userData.id!);
-      setUserCarList([...mockUserCarList, ...result]);
+    if (!userCarIdStr) {
+      console.error('no react url param userCarId')
+      setIsLoading(false);
+      return;
+    }
+    const getUserCar = async () => {
+      const result: CarEntity = await ApiService.getUserCar(userData.id!, Number(userCarIdStr));
+      setUserCar(result);
       setIsLoading(false);
     }
-    getUserCarList();
+    getUserCar();
   }, [])
 
-  const handleUserCarClick = (userCarId: number) => { }
+  const handleDamageUserCarClick = (userCarId: number) => { }
 
   return (
     <Panel id={id}>
@@ -71,7 +76,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
         <ContentCard
           header={userCar?.name}
           key={userCar?.id}
-          subtitle={`Стоимость: ${userCar.price}`}
+          subtitle={`Стоимость: ${userCar?.price}`}
           src={userCar?.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}
           text={
             (userData?.credits || 0) > (userCar?.price || 500) ? (

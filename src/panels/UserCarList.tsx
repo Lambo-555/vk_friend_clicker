@@ -45,7 +45,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
       return;
     }
     const getUserCarList = async () => {
-      const result: CarEntity[] = await ApiService.getUserCarList(userData.id!);
+      const result: CarEntity[] = await ApiService.getUserCar(userData.id!);
       setUserCarList([...mockUserCarList, ...result]);
       setIsLoading(false);
     }
