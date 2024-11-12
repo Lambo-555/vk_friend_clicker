@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Button, ContentCard, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { CarEntity, UserEntity } from '../utils/types';
+import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
 import { ApiService } from '../utils/ApiService';
 
@@ -9,10 +9,21 @@ export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
 }
 
-const mockUserCar: CarEntity = { id: 999999999, name: 'Грузится...', price: 0, imageNormalUrl: '', imageDamagedUrl: '' };
+const mockUserCar: UserCarEntity = {
+  id: 999999999,
+  state: 1001,
+  credits: 0,
+  car: {
+    id: 999999999,
+    name: 'Грузится...',
+    price: 0,
+    imageNormalUrl: '',
+    imageDamagedUrl: '',
+  }
+};
 
 export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
-  const [userCar, setUserCar] = useState<CarEntity | null>(mockUserCar);
+  const [userCar, setUserCar] = useState<UserCarEntity | null>(mockUserCar);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -50,19 +61,42 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       return;
     }
     const getUserCar = async () => {
-      const result: CarEntity = await ApiService.getUserCar(userData.id!, Number(userCarIdStr));
+      const result: UserCarEntity = await ApiService.getUserCar(userData.id!, Number(userCarIdStr));
       setUserCar(result);
       setIsLoading(false);
     }
     getUserCar();
   }, [])
 
-  const handleDamageUserCarClick = (userCarId: number) => { }
+  const handleDamageUserCarClick = async (userCarId: number) => {
+    setIsLoading(true);
+
+    if (!userData?.id) {
+      console.error('no userData?.id')
+      setIsLoading(false);
+      return;
+    }
+    if (!userCarIdStr || !userCarId) {
+      console.error('no react url param userCarId')
+      setIsLoading(false);
+      return;
+    }
+    const result: UserCarEntity = await ApiService.gamageUserCar(userData.id!, Number(userCarId || userCarIdStr));
+    if (result) {
+      const prev = Object.assign(userCar || {}, {});
+      const damageDiff = (prev?.state || 1001) - (result?.state || 0);
+      setUserCar(result);
+    }
+
+    setIsLoading(false);
+  }
+
+  // TODO вывод очков
 
   return (
     <Panel id={id}>
       <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.back()} />}>
-        {userCar?.name}
+        {userCar?.car?.name}
       </PanelHeader>
       <Placeholder
         // icon={<Icon56MessageReadOutline />}
@@ -74,18 +108,18 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
         stretched
       >
         <ContentCard
-          header={userCar?.name}
+          header={userCar?.car?.name}
           key={userCar?.id}
-          subtitle={`Стоимость: ${userCar?.price}`}
-          src={userCar?.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}
+          subtitle={`Стоимость: ${userCar?.car?.price}`}
+          src={userCar?.car?.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}
           text={
-            (userData?.credits || 0) > (userCar?.price || 500) ? (
+            (userData?.credits || 0) > (userCar?.car?.price || 500) ? (
               <Button loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleDamageUserCarClick(userCar?.id!)}>
                 Перемолоть!
               </Button>
             ) : (
               <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>
-                Невозможно выбрать
+                Невозможно взаимодействовать
               </Button>
             )
           }

@@ -64,7 +64,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
       <CardGrid size="l" spaced>
         {userCarList.map((car) => (
           <ContentCard
-            header={car.name}
+            header={`${car.name} (${car.id})`}
             key={car.id}
             subtitle={`Стоимость: ${car.price}`}
             src={car.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}

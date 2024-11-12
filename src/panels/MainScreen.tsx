@@ -1,4 +1,4 @@
-import { FC, ReactNode, } from 'react';
+import { FC, ReactNode, useState, } from 'react';
 import { Button, ButtonGroup, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Separator, Spacing } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Icon28AccessibilityOutline, Icon28CarOutline, Icon28InfoOutline, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline } from '@vkontakte/icons';
@@ -15,7 +15,9 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout }) => {
   const handleGoToUserCarList = () => routeNavigator.push(DEFAULT_VIEW_PANELS.USER_CAR_LIST);
   const handleShowAds = () => { }
   const handleAddFriends = () => { }
-  const handleShowOnboarding = () => { }
+  const handleShowOnboarding = () => {
+
+  }
 
   return (
     <Panel id={id}>

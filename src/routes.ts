@@ -20,6 +20,14 @@ export const DEFAULT_VIEW_PANELS = {
   MAIN_SCREEN: 'MAIN_SCREEN',
 } as const;
 
+export const DEFAULT_MODALS = {
+  WELCOME_1: 'WELCOME_1',
+  DAMAGE_2: 'DAMAGE_2',
+  BUY_3: 'BUY_3',
+  INVITE_4: 'INVITE_4',
+  ADS_5: 'ADS_5',
+} as const;
+
 export const routes = RoutesConfig.create([
   createRoot(DEFAULT_ROOT, [
     createView(DEFAULT_VIEW, [
