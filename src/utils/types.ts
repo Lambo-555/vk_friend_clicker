@@ -22,3 +22,9 @@ export interface AddModToFriendDto {
     effect: number;
     friendVkId: number;
 }
+
+export interface Mod {
+    id: number;
+    effect: number;
+    friends?: any[];
+}

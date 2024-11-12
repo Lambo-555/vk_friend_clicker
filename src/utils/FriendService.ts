@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AddModToFriendDto, FriendAddDto, RegisterUserDto, TapUserFriendDto } from './types';
+import { AddModToFriendDto, FriendAddDto, Mod, RegisterUserDto, TapUserFriendDto } from './types';
 
 const API_URL = 'http://localhost:3000'; // Update with your API URL
 
@@ -50,7 +50,7 @@ class FriendService {
         }
     };
 
-    static async addModToFriend(data: AddModToFriendDto) {
+    static async addModToFriend(data: AddModToFriendDto): Promise<Mod[] | undefined> {
         try {
             const response = await axios.post(`${API_URL}/friends/addMod`, data);
             return response.data;

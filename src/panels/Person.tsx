@@ -1,8 +1,8 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { NavIdProps, Panel, PanelHeader, PanelHeaderBack, Group, SimpleCell, FormItem, Progress, CellButton } from '@vkontakte/vkui';
+import { NavIdProps, Panel, PanelHeader, PanelHeaderBack, Group, SimpleCell, FormItem, Progress, CellButton, ButtonGroup, Button, Div } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import baseTheme from '@vkontakte/vkui-tokens/themes/vkBase/cssVars/theme';
-import { Icon28Flash, Icon28LockCircleFillBlack } from '@vkontakte/icons';
+import { Icon28ArrowDownOutline, Icon28ArrowUpCircleOutline, Icon28ArrowUpOutline, Icon28Flash, Icon28LockCircleFillBlack } from '@vkontakte/icons';
 import FriendService from '../utils/FriendService';
 import { RegisterUserDto } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
@@ -15,6 +15,9 @@ export interface PersonProps extends NavIdProps {
 export const Person: FC<PersonProps> = ({ id, setPopout }) => {
   const [friend, setFriend] = useState<RegisterUserDto | null>(null);
   const [points, setPoints] = useState<number>(0);
+  const [boostEffect, setBoostEffect] = useState<number>(1);
+  const [boostPrice, setBoostPrice] = useState<number>(15);
+
   const [deformStyle, setDeformStyle] = useState<React.CSSProperties>({});
   const [progressPoints, setProgressPoints] = useState<number>(0);
   const [progressColor, setProgressColor] = useState<string>('hsl(0,75%,50%)');
@@ -107,6 +110,42 @@ export const Person: FC<PersonProps> = ({ id, setPopout }) => {
     setPopout(null);
   };
 
+  const handleBoost = async () => {
+    if (vkUserId) {
+      const resultOfClick = await FriendService.addModToFriend({
+        effect: 1.1,
+        friendVkId: parseInt(vkUserId),
+      });
+
+      const coof = Math.round(
+        (resultOfClick?.reduce((prev, curr) => prev += curr.effect, 0) || 1)
+      );
+
+      const price = 1.08 ** (resultOfClick?.length || 2);
+      setBoostPrice(Math.round(price));
+
+      setBoostEffect(coof);
+    }
+  }
+
+  const handleDebuff = async () => {
+    if (vkUserId) {
+      const resultOfClick = await FriendService.addModToFriend({
+        effect: 0.95,
+        friendVkId: parseInt(vkUserId),
+      });
+
+      const coof = Math.round(
+        (resultOfClick?.reduce((prev, curr) => prev += curr.effect, 0) || 1)
+      );
+
+      const price = 1.08 ** (resultOfClick?.length || 2);
+      setBoostPrice(Math.round(price));
+
+      setBoostEffect(coof);
+    }
+  }
+
   const baseButtonStyle = {
     height: "95%",
     width: "95%",
@@ -146,7 +185,7 @@ export const Person: FC<PersonProps> = ({ id, setPopout }) => {
           // textShadow: `0px 0px 15px ${baseTheme.colorAccentLime.hover.value}`,
           textShadow: `0px 0px 15px ${progressColor}`,
           color: progressColor,
-        }} >{points}</div>
+        }} >{Math.round(points)}</div>
         <Icon28Flash width={50} height={50} />
       </div>
 
@@ -193,22 +232,40 @@ export const Person: FC<PersonProps> = ({ id, setPopout }) => {
           </div>
         </div>
       )}
-
+{/* 
       <Group mode="plain">
-        <SimpleCell indicator={
-          <CellButton subtitle='150.000' disabled before={<Icon28LockCircleFillBlack />} onClick={() => { }}>
+        <SimpleCell disabled indicator={
+          <CellButton disabled subtitle='150.000' before={<Icon28LockCircleFillBlack />} onClick={() => { }}>
             Улучшить
           </CellButton>
         } before={<Icon28Flash />}>
           Энергия <b>100/100</b>
         </SimpleCell>
-      </Group>
+      </Group> */}
+
+      <Div>
+        <Group mode="card">
+          <ButtonGroup mode="horizontal" gap="m" stretched>
+            <Button stretched mode='primary' size='l'
+              after={boostPrice % 1000 > 1 ? Math.round(boostPrice / 1000) + 'K' : boostPrice}
+              before={<Icon28ArrowUpOutline />} onClick={handleBoost}>
+              Буст
+            </Button>
+            <Button stretched mode='secondary' size='l'
+              after={boostPrice % 1000 > 1 ? Math.round(boostPrice / 1000) + 'K' : boostPrice}
+              before={<Icon28ArrowDownOutline />} onClick={handleDebuff}>
+              Дебаф
+            </Button>
+          </ButtonGroup>
+        </Group>
+        <Button stretched disabled mode='outline' size='l'>
+          {boostEffect * 100} %
+        </Button>
+      </Div>
 
     </Panel>
   );
 };
-
-{/* <Image style={imageStyle} size={200} src={user.photo_200} alt={user?.first_name} /> */ }
 
 /**
  vk-tunnel --insecure=1 --http-protocol=http --ws-protocol=wss --host=localhost --port=5173 --timeout=5000
