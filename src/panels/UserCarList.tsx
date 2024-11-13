@@ -55,7 +55,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
   }, [userData])
 
   const handleSelectUserCarClick = (userCarId: number) => {
-    routeNavigator.push(`${DEFAULT_VIEW_PANELS.USER_CAR}/${userCarId}`);
+    routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}/${userCarId}`);
   }
 
   const handleExchangeUserCarCreditsClick = async (userCarId: number) => {
@@ -94,7 +94,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
           <ContentCard
             header={
               <ContentCard
-                header={`Авто: ${userCarData?.car?.name}. Номер: ${userCarData?.car?.id}`}
+                header={`Авто: ${userCarData?.car?.name}. Номер: ${userCarData?.id}`}
                 caption={`Состояние: ${userCarData?.state}`}
                 text={`Кредиты: ${userCarData?.credits}`}
               />

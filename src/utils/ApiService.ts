@@ -20,8 +20,8 @@ export class ApiService {
         return response.data;
     };
 
-    static async getUserCar(userId: number, carId: number): Promise<UserCarEntity> {
-        const response = await axios.get(`${API_URL}/cars/user/${userId}/car/${carId}`);
+    static async getUserCar(userId: number, userCarId: number): Promise<UserCarEntity> {
+        const response = await axios.get(`${API_URL}/cars/user/${userId}/car/${userCarId}`);
         return response.data;
     };
 
@@ -30,18 +30,18 @@ export class ApiService {
         return response.data;
     };
 
-    static async removeUserCar(userId: number, carId: number): Promise<UserCarEntity> {
-        const response = await axios.delete(`${API_URL}/cars/user/${userId}/car/${carId}`);
+    static async removeUserCar(userId: number, userCarId: number): Promise<UserCarEntity> {
+        const response = await axios.delete(`${API_URL}/cars/user/${userId}/car/${userCarId}`);
         return response.data;
     };
 
-    static async gamageUserCar(userId: number, carId: number): Promise<UserCarEntity> {
-        const response = await axios.post(`${API_URL}/cars/user/${userId}/car/${carId}/damage`);
+    static async gamageUserCar(userId: number, userCarId: number): Promise<UserCarEntity> {
+        const response = await axios.post(`${API_URL}/cars/user/${userId}/car/${userCarId}/damage`);
         return response.data;
     };
 
-    static async exchangeUserCar(userId: number, carId: number): Promise<UserCarEntity> {
-        const response = await axios.post(`${API_URL}/cars/user/${userId}/car/${carId}/exchange`);
+    static async exchangeUserCar(userId: number, userCarId: number): Promise<UserCarEntity> {
+        const response = await axios.post(`${API_URL}/cars/user/${userId}/car/${userCarId}/exchange`);
         return response.data;
     };
 

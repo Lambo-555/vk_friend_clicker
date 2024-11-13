@@ -41,7 +41,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
         const user: UserEntity = await ApiService.getVkUserByVkId(vk_user_id);
         if (user) {
           setUserData(user);
-          // TODO auto register user on Main Panel
         }
       }
       setIsLoading(false);
@@ -63,6 +62,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     }
     const getUserCar = async () => {
       const result: UserCarEntity = await ApiService.getUserCar(userData.id!, Number(userCarIdStr));
+      console.log('userCAAAR', userCarIdStr);
       setUserCar(result);
       setIsLoading(false);
     }
@@ -121,14 +121,14 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           text={
             (userData?.credits || 0) > (userCar?.car?.price || 500) ? (
               <Button
-                disabled={(userCar?.state || 0) <= 0}
+                disabled={(userCar?.state || 10) <= 0}
                 loading={isLoading}
                 size="l"
                 stretched
                 style={{ marginTop: '8px' }}
                 onClick={() => handleDamageUserCarClick(userCar?.id!)}
               >
-                {(userCar?.state || 0) > 0 ? 'Молотить!' : 'Авто уничтожено'}
+                {(userCar?.state || 10) > 0 ? 'Молотить!' : 'Авто уничтожено'}
               </Button>
             ) : (
               <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>

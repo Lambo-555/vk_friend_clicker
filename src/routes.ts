@@ -34,7 +34,7 @@ export const routes = RoutesConfig.create([
       createPanel(DEFAULT_VIEW_PANELS.MAIN_SCREEN, '/', []),
       createPanel(DEFAULT_VIEW_PANELS.CAR_SHOP_LIST, `/${DEFAULT_VIEW_PANELS.CAR_SHOP_LIST}`, []),
       createPanel(DEFAULT_VIEW_PANELS.USER_CAR_LIST, `/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`, []),
-      createPanel(DEFAULT_VIEW_PANELS.USER_CAR, `${DEFAULT_VIEW_PANELS.USER_CAR_LIST}/${DEFAULT_VIEW_PANELS.USER_CAR}/:userCarId`, []),
+      createPanel(DEFAULT_VIEW_PANELS.USER_CAR, `${DEFAULT_VIEW_PANELS.USER_CAR_LIST}/:userCarId`, []),
       createPanel(DEFAULT_VIEW_PANELS.MAIN_SCREEN, '*', []),
     ]),
   ]),
