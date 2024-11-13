@@ -34,10 +34,8 @@ export const routes = RoutesConfig.create([
       createPanel(DEFAULT_VIEW_PANELS.MAIN_SCREEN, '/', []),
       createPanel(DEFAULT_VIEW_PANELS.CAR_SHOP_LIST, `/${DEFAULT_VIEW_PANELS.CAR_SHOP_LIST}`, []),
       createPanel(DEFAULT_VIEW_PANELS.USER_CAR_LIST, `/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`, []),
-      createPanel(DEFAULT_VIEW_PANELS.USER_CAR, `/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}/:userCarId`, []),
-      // createPanel(DEFAULT_VIEW_PANELS.PERSIK, `/${DEFAULT_VIEW_PANELS.PERSIK}`, []),
-      // createPanel(DEFAULT_VIEW_PANELS.PERSON, `/${DEFAULT_VIEW_PANELS.PERSON}/:vkuseridparam`, []),
-      // createPanel(DEFAULT_VIEW_PANELS.HOME, '/', []),
+      createPanel(DEFAULT_VIEW_PANELS.USER_CAR, `${DEFAULT_VIEW_PANELS.USER_CAR_LIST}/${DEFAULT_VIEW_PANELS.USER_CAR}/:userCarId`, []),
+      createPanel(DEFAULT_VIEW_PANELS.MAIN_SCREEN, '*', []),
     ]),
   ]),
 ]);

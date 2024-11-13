@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ContentCard, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder } from '@vkontakte/vkui';
+import { Button, ButtonGroup, ContentCard, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, SimpleCell } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
@@ -101,9 +101,14 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       <Placeholder
         // icon={<Icon56MessageReadOutline />}
         action={
-          <Button size="m" mode="tertiary">
-            Показать все сообщения
-          </Button>
+          <Group header={<Header mode="secondary">Техника</Header>}>
+            <SimpleCell>
+              <InfoRow header={"Кредиты"}>{userCar?.credits}</InfoRow>
+            </SimpleCell>
+            <SimpleCell>
+              <InfoRow header={"Состояние"}>{userCar?.state}</InfoRow>
+            </SimpleCell>
+          </Group>
         }
         stretched
       >

@@ -53,7 +53,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
   }, [userData])
 
   const handleSelectUserCarClick = (userCarId: number) => {
-    routeNavigator.push(`/${userCarId}`);
+    routeNavigator.push(`${DEFAULT_VIEW_PANELS.USER_CAR}/${userCarId}`);
   }
 
   return (
