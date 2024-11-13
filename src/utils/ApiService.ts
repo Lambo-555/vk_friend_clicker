@@ -36,7 +36,7 @@ export class ApiService {
     };
 
     static async gamageUserCar(userId: number, carId: number): Promise<UserCarEntity> {
-        const response = await axios.delete(`${API_URL}/cars/user/${userId}/car/${carId}/damage`);
+        const response = await axios.post(`${API_URL}/cars/user/${userId}/car/${carId}/damage`);
         return response.data;
     };
 

@@ -9,21 +9,21 @@ export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
 }
 
-const mockUserCar: UserCarEntity = {
-  id: 999999999,
-  state: 1001,
-  credits: 0,
-  car: {
-    id: 999999999,
-    name: 'Грузится...',
-    price: 0,
-    imageNormalUrl: '',
-    imageDamagedUrl: '',
-  }
-};
+// const mockUserCar: UserCarEntity = {
+//   id: 999999999,
+//   state: 1001,
+//   credits: 0,
+//   car: {
+//     id: 999999999,
+//     name: 'Грузится...',
+//     price: 0,
+//     imageNormalUrl: '',
+//     imageDamagedUrl: '',
+//   }
+// };
 
 export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
-  const [userCar, setUserCar] = useState<UserCarEntity | null>(mockUserCar);
+  const [userCar, setUserCar] = useState<UserCarEntity | null>();
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -66,7 +66,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       setIsLoading(false);
     }
     getUserCar();
-  }, [])
+  }, [userData])
 
   const handleDamageUserCarClick = async (userCarId: number) => {
     setIsLoading(true);

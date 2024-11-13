@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Button, CardGrid, ContentCard, NavIdProps, Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { CarEntity, UserEntity } from '../utils/types';
+import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
 import { ApiService } from '../utils/ApiService';
 import { DEFAULT_VIEW_PANELS } from '../routes';
@@ -11,11 +11,11 @@ export interface UserCarListProps extends NavIdProps {
 }
 
 const mockUserCarList: CarEntity[] = [
-  { id: 999999999, name: 'Лага Копейка', price: 550, imageNormalUrl: '', imageDamagedUrl: '' },
+  // { id: 999999999, name: 'Лага Копейка', price: 550, imageNormalUrl: '', imageDamagedUrl: '' },
 ];
 
 export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
-  const [userCarList, setUserCarList] = useState<CarEntity[]>(mockUserCarList);
+  const [userCarList, setUserCarList] = useState<UserCarEntity[]>(mockUserCarList);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -45,15 +45,15 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
       return;
     }
     const getUserCarList = async () => {
-      const result: CarEntity[] = await ApiService.getUserCar(userData.id!);
+      const result: UserCarEntity[] = await ApiService.getUserCarList(userData.id!);
       setUserCarList([...mockUserCarList, ...result]);
       setIsLoading(false);
     }
     getUserCarList();
-  }, [])
+  }, [userData])
 
   const handleSelectUserCarClick = (userCarId: number) => {
-    routeNavigator.push(`${DEFAULT_VIEW_PANELS.USER_CAR}/${userCarId}`);
+    routeNavigator.push(`/${userCarId}`);
   }
 
   return (
@@ -62,15 +62,15 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
         Ваши автомобили
       </PanelHeader>
       <CardGrid size="l" spaced>
-        {userCarList.map((car) => (
+        {userCarList.map((userCarData) => (
           <ContentCard
-            header={`${car.name} (${car.id})`}
-            key={car.id}
-            subtitle={`Стоимость: ${car.price}`}
-            src={car.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}
+            header={`${userCarData?.car?.name} (${userCarData?.car?.id})`}
+            key={userCarData.id}
+            subtitle={`Стоимость: ${userCarData?.car?.price}`}
+            src={userCarData?.car?.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}
             text={
-              (userData?.credits || 0) > (car?.price || 500) ? (
-                <Button loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleSelectUserCarClick(car.id!)}>
+              (userData?.credits || 0) > (userCarData?.car?.price || 500) ? (
+                <Button loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleSelectUserCarClick(userCarData?.id!)}>
                   Перемолоть!
                 </Button>
               ) : (
