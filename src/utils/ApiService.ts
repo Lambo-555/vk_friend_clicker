@@ -40,6 +40,11 @@ export class ApiService {
         return response.data;
     };
 
+    static async exchangeUserCar(userId: number, carId: number): Promise<UserCarEntity> {
+        const response = await axios.post(`${API_URL}/cars/user/${userId}/car/${carId}/exchange`);
+        return response.data;
+    };
+
     // User API
 
     static async getUserById(userId: number): Promise<UserEntity> {

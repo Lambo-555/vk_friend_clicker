@@ -24,6 +24,7 @@ export interface UserCarListProps extends NavIdProps {
 
 export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   const [userCar, setUserCar] = useState<UserCarEntity | null>();
+  const [damage, setDamage] = useState<number>(0);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -85,6 +86,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     if (result) {
       const prev = Object.assign(userCar || {}, {});
       const damageDiff = (prev?.state || 1001) - (result?.state || 0);
+      setDamage(damageDiff)
       setUserCar(result);
     }
 
@@ -101,11 +103,9 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       <Placeholder
         // icon={<Icon56MessageReadOutline />}
         action={
-          <Group header={<Header mode="secondary">Техника</Header>}>
+          <Group mode='plain' header={<Header mode="secondary">Техника</Header>}>
             <SimpleCell>
               <InfoRow header={"Кредиты"}>{userCar?.credits}</InfoRow>
-            </SimpleCell>
-            <SimpleCell>
               <InfoRow header={"Состояние"}>{userCar?.state}</InfoRow>
             </SimpleCell>
           </Group>
@@ -116,11 +116,19 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           header={userCar?.car?.name}
           key={userCar?.id}
           subtitle={`Стоимость: ${userCar?.car?.price}`}
+          caption={`Крайний удар по авто: ${damage}`}
           src={userCar?.car?.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}
           text={
             (userData?.credits || 0) > (userCar?.car?.price || 500) ? (
-              <Button loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleDamageUserCarClick(userCar?.id!)}>
-                Перемолоть!
+              <Button
+                disabled={(userCar?.state || 0) <= 0}
+                loading={isLoading}
+                size="l"
+                stretched
+                style={{ marginTop: '8px' }}
+                onClick={() => handleDamageUserCarClick(userCar?.id!)}
+              >
+                {(userCar?.state || 0) > 0 ? 'Молотить!' : 'Авто уничтожено'}
               </Button>
             ) : (
               <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>

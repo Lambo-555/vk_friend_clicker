@@ -10,7 +10,7 @@ export interface CarShopListProps extends NavIdProps {
 }
 
 const mockCarShopList: CarEntity[] = [
-  { id: 999999999, name: 'Лага Копейка', price: 550, imageNormalUrl: '', imageDamagedUrl: '' },
+  // { id: 999999999, name: 'Лага Копейка', price: 550, imageNormalUrl: '', imageDamagedUrl: '' },
 ];
 
 export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
