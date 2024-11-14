@@ -102,9 +102,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
         align={'stretch'}
         margin='auto'
         gap={'m'}
-        columns={
-          Math.floor(window.innerWidth / 350)
-        }
+        columns={Math.floor(window.innerWidth / 350)}
       >
         {userCarList?.map((userCarData) => {
           const imgIdx = calculateImgIndex(1000 - (userCarData?.state || 1));

@@ -1,7 +1,7 @@
 import { FC, ReactNode, useState, } from 'react';
-import { Button, ButtonGroup, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Separator, Spacing } from '@vkontakte/vkui';
+import { Button, ButtonGroup, Div, Image, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Separator, Spacing } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { Icon28AccessibilityOutline, Icon28CarOutline, Icon28InfoOutline, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline } from '@vkontakte/icons';
+import { Icon24HammerOutline, Icon28AccessibilityOutline, Icon28CarOutline, Icon28InfoOutline, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline } from '@vkontakte/icons';
 import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
 
 export interface MainScreenProps extends NavIdProps {
@@ -14,6 +14,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
 
   const handleGoToCarShop = () => routeNavigator.push(DEFAULT_VIEW_PANELS.CAR_SHOP_LIST);
   const handleGoToUserCarList = () => routeNavigator.push(DEFAULT_VIEW_PANELS.USER_CAR_LIST);
+  const handleGoToUserToolList = () => routeNavigator.push(DEFAULT_VIEW_PANELS.USER_CAR_LIST);
   const handleShowOnboarding = () => setCurrentModal(DEFAULT_MODALS.WELCOME_1);
   const handleShowAds = () => { }
   const handleAddFriends = () => { }
@@ -26,6 +27,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       </PanelHeader>
       <Placeholder
         // icon={<Icon56MessageReadOutline />}
+        header={<img alt='разбитое авто' style={{maxWidth: 300}} src='src/assets/1/5.png'/>}
         action={
           <Button size="m" mode="tertiary">
             Наше сообщество
@@ -36,10 +38,13 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
         <Div>
           <ButtonGroup mode="vertical" gap="m" style={{ minWidth: 328 }}>
             <Button before={<Icon28ShoppingCartOutline />} onClick={handleGoToCarShop} size="l" appearance="accent" stretched>
-              Автосалон
+              Свалка
             </Button>
             <Button before={<Icon28CarOutline />} onClick={handleGoToUserCarList} size="l" appearance="accent" stretched>
-              Ваши машины
+              Ваш гараж
+            </Button>
+            <Button disabled before={<Icon24HammerOutline />} onClick={handleGoToUserToolList} size="l" appearance="accent" stretched>
+              Инструменты (WIP)
             </Button>
             <Spacing size={12}>
               <Separator />

@@ -10,7 +10,7 @@ export const WelcomeOnboarding = ({ id, setCurrentModal }: { id: string,  setCur
         <ModalCard
             id={id} 
             onClose={() => setCurrentModal(null)}
-            style={{ width: 320 }}
+            
             icon={<Icon56GavelOutline />}
             header="О чем игра?"
             subheader="Тут надо крушить и ломать авто на запчасти!"
@@ -36,7 +36,7 @@ export const DamageOnboarding = ({ id, setCurrentModal }: { id: string,  setCurr
         <ModalCard 
             id={id} 
             onClose={() => setCurrentModal(null)}
-            style={{ width: 320 }}
+            
             icon={<Icon56WrenchOutline />}
             header="Как провигаться?"
             subheader="Выбирай авто из своего списка машин и активно тапай"
@@ -62,7 +62,7 @@ export const BuyOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrent
         <ModalCard 
             id={id} 
             onClose={() => setCurrentModal(null)}
-            style={{ width: 320 }}
+            
             icon={<Icon56DeleteOutlineIos />}
             header="А если я все сломаю?"
             subheader="В этом суть! Покупай хлам за кредиты и ломай его для большей прибыли"
@@ -88,7 +88,7 @@ export const InviteOnboarding = ({ id, setCurrentModal }: { id: string,  setCurr
         <ModalCard 
             id={id} 
             onClose={() => setCurrentModal(null)}
-            style={{ width: 320 }}
+            
             icon={<Icon56Users3Outline />}
             header="А вдруг мои лапки устанут?"
             subheader="Приглашай друзей в игру и получай приятный бонус"
@@ -114,7 +114,7 @@ export const AdsOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrent
         <ModalCard
             id={id}
             onClose={() => setCurrentModal(null)}
-            style={{ width: 320 }}
+            
             icon={<Icon56StopwatchOutline />}
             header="Что делать если я лев-тигр нет друзей?"
             subheader="Смотри рекламу, получай бонус и ищи друзей в нашем сообществе!"
@@ -129,7 +129,7 @@ export const AdsOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrent
                             В сообщество
                         </Button>
                         <Button onClick={() => setCurrentModal(null)} size="l" mode="secondary" stretched>
-                            Выход
+                            Я... Я не лев-тигр...
                         </Button>
                     </ButtonGroup>
                 </React.Fragment>

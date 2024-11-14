@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, CardGrid, ContentCard, NavIdProps, Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
+import { Button, CardGrid, ContentCard, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
@@ -18,6 +18,15 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const routeNavigator = useRouteNavigator();
+
+  const getCarImageById = (carId: number, imgId: number) => {
+    const localUrl = `src/assets/${carId}/${imgId}.png`;
+    return localUrl;
+  };
+
+  const calculateImgIndex = (num: number): number => {
+    return Math.min(Math.floor(num / 100) + 1, 10);
+  }
 
   useEffect(() => {
     setIsLoading(true)
@@ -65,30 +74,39 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
   return (
     <Panel id={id}>
       <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.back()} />}>
-        Автомагазин
+        Свалка
       </PanelHeader>
-      <CardGrid size="l" spaced>
-        {carList?.map((car) => (
-          <ContentCard
-            header={car.name}
-            key={car.id}
-            subtitle={`Стоимость: ${car.price}`}
-            src={car.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}
-            text={
-              (userData?.credits || 0) > (car?.price || 500) ? (
-                <Button loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleBuyUserBuyClick(car.id!)}>
-                  Купить за {car.price}
-                </Button>
-              ) : (
-                <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>
-                  Невозможно купить
-                </Button>
-              )
-            }
-            maxHeight={250}
-          />
-        ))}
-      </CardGrid>
+      <SimpleGrid
+        align={'stretch'}
+        margin='auto'
+        gap={'m'}
+        columns={Math.floor(window.innerWidth / 350)}
+      >
+        {carList?.map((car) => {
+          return (
+            <ContentCard
+              header={`Модель: ${car.name}`}
+              key={car.id}
+              subtitle={`Стоимость: ${car.price}`}
+              src={getCarImageById(car?.id || 1, 1)}
+
+              text={
+                (userData?.credits || 0) > (car?.price || 500) ? (
+                  <Button loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleBuyUserBuyClick(car.id!)}>
+                    Купить за {car.price}
+                  </Button>
+                ) : (
+                  <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>
+                    Невозможно купить
+                  </Button>
+                )
+              }
+              maxHeight={250}
+            />
+          )
+        }
+        )}
+      </SimpleGrid>
     </Panel >
   );
 };
