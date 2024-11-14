@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState, } from 'react';
-import { Button, ButtonGroup, Div, Image, Link, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Separator, Snackbar, Spacing } from '@vkontakte/vkui';
+import { Button, ButtonGroup, Counter, Div, Image, Link, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Separator, Snackbar, Spacing } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28CarOutline, Icon28StarCircleFillBlue, Icon28InfoOutline, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline } from '@vkontakte/icons';
 import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
@@ -112,7 +112,17 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
 
   return (
     <Panel id={id}>
-      <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.back()} />}>
+      <PanelHeader before={
+        <Div>
+          <Button
+            before={<Icon20DiamondOutline />}
+            mode="outline"
+            appearance="positive"
+            size="m"
+          >{userData?.credits || 0}
+          </Button>
+        </Div>
+      }>
         ТапаЛом
       </PanelHeader>
       <Placeholder
