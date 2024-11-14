@@ -1,9 +1,9 @@
 import { FC, ReactNode, useEffect, useState, } from 'react';
-import { Button, ButtonGroup, Counter, Div, Image, Link, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Separator, Snackbar, Spacing } from '@vkontakte/vkui';
+import { Button, ButtonGroup, Div, Link, NavIdProps, Panel, PanelHeader, Placeholder, Separator, Snackbar, Spacing } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28CarOutline, Icon28StarCircleFillBlue, Icon28InfoOutline, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline } from '@vkontakte/icons';
+import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28CarOutline, Icon28StarCircleFillBlue, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline } from '@vkontakte/icons';
 import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
-import bridge, { EAdsFormats, UserGetFriendsFriend } from '@vkontakte/vk-bridge';
+import bridge, { EAdsFormats } from '@vkontakte/vk-bridge';
 import { UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
 
@@ -19,6 +19,8 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
   const openSnackbar = (message?: string, icon?: ReactNode) => {
     setPopout(
       <Snackbar
+        onClick={() => setPopout(null)}
+        duration={2000}
         onClose={() => setPopout(null)}
         before={icon ? icon : null}
       >
@@ -50,8 +52,9 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
         ad_format: EAdsFormats.REWARD,
       })
       if (adsShow?.result && userData?.id) {
-        const isBonus = await ApiService.addInviteBonus(userData.id);
-        if (isBonus) {
+        const isSuccess = await ApiService.addInviteBonus(userData.id);
+        if (isSuccess) {
+          setUserData(isSuccess);
           openSnackbar(
             `Кредиты за рекламу: ${250}`,
             <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
@@ -73,6 +76,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       if (toFavorites?.result && userData?.id) {
         const isBonus = await ApiService.addInviteBonus(userData.id);
         if (isBonus) {
+          setUserData(isBonus);
           openSnackbar(
             `Спасибо! Ваши доп.кредиты: ${250}`,
             <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
@@ -94,6 +98,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       if (userListData && userData?.id) {
         const isBonus = await ApiService.addInviteBonus(userData.id);
         if (isBonus) {
+          setUserData(isBonus);
           openSnackbar(
             `Вы получили кредиты: ${250}`,
             <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />

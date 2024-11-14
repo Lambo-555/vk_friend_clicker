@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ButtonGroup, CardGrid, ContentCard, Div, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid } from '@vkontakte/vkui';
+import { Button, ButtonGroup, CardGrid, ContentCard, Div, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid, Snackbar } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
@@ -30,6 +30,19 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
   const calculateImgIndex = (num: number): number => {
     return Math.min(Math.floor(num / 100) + 1, 10);
   }
+
+  const openSnackbar = (message?: string, icon?: ReactNode) => {
+    setPopout(
+      <Snackbar
+        onClick={() => setPopout(null)}
+        duration={2000}
+        onClose={() => setPopout(null)}
+        before={icon ? icon : null}
+      >
+        {message || 'Что-то пошло не так'}
+      </Snackbar>
+    );
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -73,8 +86,13 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
     }
     const result: UserCarEntity = await ApiService.exchangeUserCar(userData.id!, Number(userCarId));
     if (result) {
+      if (result?.user) setUserData(result.user);
       setUserCarList(
         userCarList.filter(item => item.id !== userCarId)
+      )
+      openSnackbar(
+        `Осколки модели "${result.car?.name || 'basecar'}" проданы за ${result.credits || 0}`,
+        <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
       )
     }
   }

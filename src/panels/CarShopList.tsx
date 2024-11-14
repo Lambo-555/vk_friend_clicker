@@ -1,10 +1,10 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, CardGrid, ContentCard, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid } from '@vkontakte/vkui';
+import { Button, CardGrid, ContentCard, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid, Snackbar } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
 import bridge from '@vkontakte/vk-bridge';
-import { Icon20DiamondOutline } from '@vkontakte/icons';
+import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
 
 export interface CarShopListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -25,9 +25,18 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
     return localUrl;
   };
 
-  const calculateImgIndex = (num: number): number => {
-    return Math.min(Math.floor(num / 100) + 1, 10);
-  }
+  const openSnackbar = (message?: string, icon?: ReactNode) => {
+    setPopout(
+      <Snackbar
+        onClick={() => setPopout(null)}
+        duration={2000}
+        onClose={() => setPopout(null)}
+        before={icon ? icon : null}
+      >
+        {message || 'Что-то пошло не так'}
+      </Snackbar>
+    );
+  };
 
   useEffect(() => {
     setIsLoading(true)
@@ -59,16 +68,19 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
     setIsLoading(true)
     if (!userData?.id) {
       console.error('no userData.id');
-      setIsLoading(false)
+      setIsLoading(false);
       return;
     }
 
     const result: UserCarEntity = await ApiService.buyUserCar(userData.id, carId);
     if (result) {
-      console.log('deal success')
-      // TODO вывести что-то игроку
-      // выводить плашки из вк юай
-      setIsLoading(false)
+      console.log('deal success', result)
+      openSnackbar(
+        `Модель ${result.car?.name || 'basecar'} куплена за ${result.car?.price || 0}`,
+        <Icon20CheckCircleFillGreen />
+      );
+      if (result?.user) setUserData(result.user);
+      setIsLoading(false);
     }
   }
 
@@ -77,7 +89,7 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
       <PanelHeader
         before={
           <>
-            <PanelHeaderBack onClick={() => routeNavigator.back()} />
+            <PanelHeaderBack onClick={() => routeNavigator.push('/')} />
             <Div>
               <Button
                 before={<Icon20DiamondOutline />}
@@ -112,7 +124,7 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
                   </Button>
                 ) : (
                   <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>
-                    Невозможно купить
+                    Нет денег на хлам((
                   </Button>
                 )
               }
