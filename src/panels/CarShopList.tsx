@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, CardGrid, ContentCard, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid, Snackbar } from '@vkontakte/vkui';
+import { Button, CardGrid, ContentCard, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid, Snackbar, Spinner } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
@@ -10,12 +10,8 @@ export interface CarShopListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
 }
 
-const mockCarShopList: CarEntity[] = [
-  // { id: 999999999, name: 'Лага Копейка', price: 550, imageNormalUrl: '', imageDamagedUrl: '' },
-];
-
 export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
-  const [carList, setCarList] = useState<CarEntity[]>(mockCarShopList);
+  const [carList, setCarList] = useState<CarEntity[]>([]);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const routeNavigator = useRouteNavigator();
@@ -58,11 +54,13 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
     setIsLoading(true)
     const getCarShopList = async () => {
       const result: CarEntity[] = await ApiService.getCarList();
-      setCarList([...mockCarShopList, ...result]);
+      if (result?.length) {
+        setCarList(result);
+      }
       setIsLoading(false)
     }
     getCarShopList();
-  }, [])
+  }, [userData])
 
   const handleBuyUserBuyClick = async (carId: number) => {
     setIsLoading(true)
@@ -96,6 +94,7 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
                 mode="outline"
                 appearance="positive"
                 size="m"
+                style={{minWidth: 75}}
               >{userData?.credits || 0}
               </Button>
             </Div>
@@ -108,23 +107,25 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
         margin='auto'
         gap={'m'}
         columns={Math.floor(window.innerWidth / 350)}
-      >
-        {carList?.map((car) => {
+      > {!carList.length && (
+        <Spinner size="large" />
+      )}
+        {carList && Array.isArray(carList) && carList.map((car: CarEntity, index: number) => {
           return (
             <ContentCard
-              header={`Модель: ${car.name}`}
-              key={car.id}
-              subtitle={`Стоимость: ${car.price}`}
+              header={`Модель: ${car?.name || 'error'}`}
+              key={index}
+              subtitle={`Стоимость: ${car?.price || 'error'}`}
               src={getCarImageById(car?.id || 1, 1)}
 
               text={
                 (userData?.credits || 0) > (car?.price || 500) ? (
                   <Button loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleBuyUserBuyClick(car.id!)}>
-                    Купить за {car.price}
+                    Купить за {car?.price || 'error'}
                   </Button>
                 ) : (
                   <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>
-                    Нет денег на хлам((
+                    Нет денег на хлам
                   </Button>
                 )
               }

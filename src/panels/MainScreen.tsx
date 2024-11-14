@@ -124,6 +124,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
             mode="outline"
             appearance="positive"
             size="m"
+            style={{minWidth: 75}}
           >{userData?.credits || 0}
           </Button>
         </Div>

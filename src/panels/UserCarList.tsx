@@ -109,6 +109,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
                 mode="outline"
                 appearance="positive"
                 size="m"
+                style={{minWidth: 75}}
               >{userData?.credits || 0}
               </Button>
             </Div>
@@ -117,17 +118,19 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
         Ваш гараж
       </PanelHeader>
       {!userCarList?.length && (
-        <Group mode='card' header={<Header mode="secondary">Ваш гараж пуст</Header>}>
-          <Button
-            before={<Icon28ShoppingCartOutline />}
-            size="l"
-            appearance="positive"
-            stretched
-            onClick={handleGoToCarShop}
-          >
-            К покупкам!
-          </Button>
-        </Group>
+        <Div>
+          <Group mode='card' header={<Header mode="secondary">Ваш гараж пуст</Header>}>
+            <Button
+              before={<Icon28ShoppingCartOutline />}
+              size="l"
+              appearance="positive"
+              stretched
+              onClick={handleGoToCarShop}
+            >
+              К покупкам!
+            </Button>
+          </Group>
+        </Div>
       )}
       <SimpleGrid
         align={'stretch'}
