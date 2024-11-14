@@ -39,7 +39,6 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
         const user: UserEntity = await ApiService.getVkUserByVkId(vk_user_id);
         if (user) {
           setUserData(user);
-          // TODO auto register user on Main Panel
         }
       }
       setIsLoading(false);

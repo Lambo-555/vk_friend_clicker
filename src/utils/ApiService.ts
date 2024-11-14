@@ -71,4 +71,9 @@ export class ApiService {
         const response = await axios.post(`${API_URL}/users/addFriend`, friendData);
         return response.data;
     };
+
+    static async addInviteBonus(userId: number): Promise<UserEntity> {
+        const response = await axios.get(`${API_URL}/users/addInviteBonus/${userId}`);
+        return response.data;
+    };
 }
