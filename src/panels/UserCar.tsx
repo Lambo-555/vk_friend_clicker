@@ -1,37 +1,37 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ButtonGroup, ContentCard, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, SimpleCell } from '@vkontakte/vkui';
+import { Button, ContentCard, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, SimpleCell } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
 import { ApiService } from '../utils/ApiService';
+import './ImageSwitcher.css';
+import { DEFAULT_VIEW_PANELS } from '../routes';
+import { Icon20DiamondOutline } from '@vkontakte/icons';
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
 }
-
-// const mockUserCar: UserCarEntity = {
-//   id: 999999999,
-//   state: 1001,
-//   credits: 0,
-//   car: {
-//     id: 999999999,
-//     name: 'Грузится...',
-//     price: 0,
-//     imageNormalUrl: '',
-//     imageDamagedUrl: '',
-//   }
-// };
 
 export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   const [userCar, setUserCar] = useState<UserCarEntity | null>();
   const [damage, setDamage] = useState<number>(0);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [currentCarImgIndex, setCurrentCarImgIndex] = useState<number>(0);
+  const [clickCount, setClickCount] = useState<number>(0);
+
+  const [xOffset, setXOffset] = useState<number>(0);
+  const [yOffset, setYOffset] = useState<number>(0);
 
   const routeNavigator = useRouteNavigator();
 
   const params = useParams<'userCarId'>();
   const userCarIdStr: string | undefined = params?.userCarId;
+
+  const getCarImageById = (carId: number, imgId: number) => {
+    const localUrl = `src/assets/${carId}/${imgId}.png`;
+    return localUrl;
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -61,13 +61,18 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       return;
     }
     const getUserCar = async () => {
-      const result: UserCarEntity = await ApiService.getUserCar(userData.id!, Number(userCarIdStr));
+      const userCar: UserCarEntity = await ApiService.getUserCar(userData.id!, Number(userCarIdStr));
       console.log('userCAAAR', userCarIdStr);
-      setUserCar(result);
+      setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)));
+      setUserCar(userCar);
       setIsLoading(false);
     }
     getUserCar();
   }, [userData])
+
+  const calculateImgIndex = (num: number): number => {
+    return Math.min(Math.floor(num / 100) + 1, 10);
+  }
 
   const handleDamageUserCarClick = async (userCarId: number) => {
     setIsLoading(true);
@@ -82,22 +87,46 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       setIsLoading(false);
       return;
     }
-    const result: UserCarEntity = await ApiService.gamageUserCar(userData.id!, Number(userCarId || userCarIdStr));
-    if (result) {
-      const prev = Object.assign(userCar || {}, {});
-      const damageDiff = (prev?.state || 1001) - (result?.state || 0);
-      setDamage(damageDiff)
-      setUserCar(result);
+    if ((userCar?.state || 0) <= 0) {
+      setIsLoading(false);
+      return;
     }
 
+    // Effects
+    const newXOffset = Math.random() * 10 - 5;
+    const newYOffset = Math.random() * 10 - 5;
+    setXOffset(newXOffset);
+    setYOffset(newYOffset);
+    // Logic
+    setClickCount((prev) => prev + 1);
+    if (clickCount >= 5) {
+      setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)))
+      setClickCount(0);
+      const result: UserCarEntity = await ApiService.gamageUserCar(userData.id!, Number(userCarId || userCarIdStr));
+      if (result) {
+        const prev = Object.assign(userCar || {}, {});
+        const damageDiff = (prev?.state || 1001) - (result?.state || 0);
+        setDamage(damageDiff)
+        setUserCar(result);
+      }
+    }
     setIsLoading(false);
   }
 
-  // TODO вывод очков
+  const handleExchangeUserCarCreditsClick = async (userCarId: number) => {
+    if (!userData?.id) {
+      console.error('no userData?.id')
+      return;
+    }
+    const result: UserCarEntity = await ApiService.exchangeUserCar(userData.id!, Number(userCarId));
+    if (result) {
+      routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`)
+    }
+  }
 
   return (
     <Panel id={id}>
-      <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.back()} />}>
+      <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`)} />}>
         {userCar?.car?.name}
       </PanelHeader>
       <Placeholder
@@ -112,6 +141,21 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
         }
         stretched
       >
+        <div
+          className={`image-container ${clickCount > 0 ? 'active' : ''}`}
+          onClick={() => handleDamageUserCarClick(userCar?.id || 0)}
+          style={{
+            transform: `translate(${xOffset}px, ${yOffset}px) rotate(${(xOffset - yOffset) / 2}deg)`,
+            transition: 'transform 0.2s ease',
+            maxWidth: 500,
+          }}
+        >
+          <img
+            src={getCarImageById(userCar?.car?.id || 1, currentCarImgIndex)}
+            alt={`Image ${currentCarImgIndex}`}
+            className={`image ${clickCount > 0 ? 'bright' : ''}`}
+          />
+        </div>
         <ContentCard
           header={userCar?.car?.name}
           key={userCar?.id}
@@ -121,18 +165,18 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           text={
             (userData?.credits || 0) > (userCar?.car?.price || 500) ? (
               <Button
-                disabled={(userCar?.state || 10) <= 0}
+                disabled={(userCar?.state || 0) <= 0}
                 loading={isLoading}
                 size="l"
                 stretched
                 style={{ marginTop: '8px' }}
                 onClick={() => handleDamageUserCarClick(userCar?.id!)}
               >
-                {(userCar?.state || 10) > 0 ? 'Молотить!' : 'Авто уничтожено'}
+                {(userCar?.state || 0) > 0 ? 'Молотить!' : 'Авто уничтожено'}
               </Button>
             ) : (
-              <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>
-                Невозможно взаимодействовать
+              <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCar?.id!)}>
+                Обменять
               </Button>
             )
           }
