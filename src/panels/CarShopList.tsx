@@ -1,9 +1,10 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, CardGrid, ContentCard, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid } from '@vkontakte/vkui';
+import { Button, CardGrid, ContentCard, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
 import bridge from '@vkontakte/vk-bridge';
+import { Icon20DiamondOutline } from '@vkontakte/icons';
 
 export interface CarShopListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -73,7 +74,21 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
 
   return (
     <Panel id={id}>
-      <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.back()} />}>
+      <PanelHeader
+        before={
+          <>
+            <PanelHeaderBack onClick={() => routeNavigator.back()} />
+            <Div>
+              <Button
+                before={<Icon20DiamondOutline />}
+                mode="outline"
+                appearance="positive"
+                size="m"
+              >{userData?.credits || 0}
+              </Button>
+            </Div>
+          </>
+        }>
         Свалка
       </PanelHeader>
       <SimpleGrid

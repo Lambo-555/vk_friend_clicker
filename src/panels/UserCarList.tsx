@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ButtonGroup, CardGrid, ContentCard, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid } from '@vkontakte/vkui';
+import { Button, ButtonGroup, CardGrid, ContentCard, Div, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
@@ -81,8 +81,22 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
 
   return (
     <Panel id={id}>
-      <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.MAIN_SCREEN}`)} />}>
-        Ваши автомобили
+      <PanelHeader
+        before={
+          <>
+            <PanelHeaderBack onClick={() => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.MAIN_SCREEN}`)} />
+            <Div>
+              <Button
+                before={<Icon20DiamondOutline />}
+                mode="outline"
+                appearance="positive"
+                size="m"
+              >{userData?.credits || 0}
+              </Button>
+            </Div>
+          </>
+        }>
+        Ваш гараж
       </PanelHeader>
       {!userCarList?.length && (
         <Group mode='card' header={<Header mode="secondary">Ваш гараж пуст</Header>}>
