@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ButtonGroup, CardGrid, ContentCard, Div, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid, Snackbar } from '@vkontakte/vkui';
+import { Button, ButtonGroup, ContentCard, Div, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid, Snackbar } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';

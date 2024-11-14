@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, CardGrid, ContentCard, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid, Snackbar, Spinner } from '@vkontakte/vkui';
+import { Button, ContentCard, Div, NavIdProps, Panel, PanelHeader, PanelHeaderBack, SimpleGrid, Snackbar, Spinner } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';

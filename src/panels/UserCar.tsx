@@ -1,12 +1,12 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ContentCard, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, SimpleCell } from '@vkontakte/vkui';
+import { Button, ContentCard, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, SimpleCell, Snackbar } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
 import { ApiService } from '../utils/ApiService';
 import './ImageSwitcher.css';
 import { DEFAULT_VIEW_PANELS } from '../routes';
-import { Icon20DiamondOutline } from '@vkontakte/icons';
+import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -31,6 +31,19 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   const getCarImageById = (carId: number, imgId: number) => {
     const localUrl = `src/assets/${carId}/${imgId}.png`;
     return localUrl;
+  };
+
+  const openSnackbar = (message?: string, icon?: ReactNode) => {
+    setPopout(
+      <Snackbar
+        onClick={() => setPopout(null)}
+        duration={2000}
+        onClose={() => setPopout(null)}
+        before={icon ? icon : null}
+      >
+        {message || 'Что-то пошло не так'}
+      </Snackbar>
+    );
   };
 
   useEffect(() => {
@@ -89,6 +102,10 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     }
     if ((userCar?.state || 0) <= 0) {
       setIsLoading(false);
+      openSnackbar(
+        `Модель ${userCar?.car?.name || 'basecar'} полностью уничтожена`,
+        <Icon20CheckCircleFillGreen />
+      );
       return;
     }
 

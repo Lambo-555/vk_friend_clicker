@@ -1,8 +1,8 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { NavIdProps, Panel, PanelHeader, PanelHeaderBack, Group, SimpleCell, FormItem, Progress, CellButton, ButtonGroup, Button, Div } from '@vkontakte/vkui';
+import { NavIdProps, Panel, PanelHeader, PanelHeaderBack, Group, FormItem, Progress, ButtonGroup, Button, Div } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import baseTheme from '@vkontakte/vkui-tokens/themes/vkBase/cssVars/theme';
-import { Icon28ArrowDownOutline, Icon28ArrowUpCircleOutline, Icon28ArrowUpOutline, Icon28Flash, Icon28LockCircleFillBlack } from '@vkontakte/icons';
+import { Icon28ArrowDownOutline, Icon28ArrowUpOutline, Icon28Flash } from '@vkontakte/icons';
 import FriendService from '../utils/FriendService';
 import { RegisterUserDto } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';

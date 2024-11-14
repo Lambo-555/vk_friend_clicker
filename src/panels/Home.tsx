@@ -98,7 +98,7 @@ export const Home: FC<HomeProps> = ({ id }) => {
     }
   }
 
-  const handleDeleteUser = async (id: number): Promise<void> => { }
+  const handleDeleteUser = async (id: number): Promise<void> => { console.log(id) }
 
   // EXAMPLE
   // useEffect(() => {

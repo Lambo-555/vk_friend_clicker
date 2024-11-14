@@ -1,6 +1,6 @@
 // import { ModalRoot, ModalPage, ModalCard, SplitLayout } from "@vkontakte/vkui";
 
-import { Icon56DeleteOutlineIos, Icon56GavelOutline, Icon56GestureOutline, Icon56StopwatchOutline, Icon56Users3Outline, Icon56WrenchOutline } from "@vkontakte/icons";
+import { Icon56DeleteOutlineIos, Icon56GavelOutline, Icon56StopwatchOutline, Icon56Users3Outline, Icon56WrenchOutline } from "@vkontakte/icons";
 import { Spacing, ButtonGroup, Button, ModalCard } from "@vkontakte/vkui";
 import React from "react";
 import { DEFAULT_MODALS } from "../routes";
