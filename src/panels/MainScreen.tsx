@@ -151,7 +151,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
               <Button before={<Icon28AccessibilityOutline />} onClick={handleShowOnboarding} size="l" appearance="positive" stretched>
                 Обучение
               </Button>
-              <Button disabled before={<Icon28MoneyWadOutline />} onClick={handleShowAds} size="l" appearance="positive" stretched>
+              <Button before={<Icon28MoneyWadOutline />} onClick={handleShowAds} size="l" appearance="positive" stretched>
                 Реклама
               </Button>
             </ButtonGroup>
