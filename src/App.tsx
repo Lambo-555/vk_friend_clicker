@@ -63,10 +63,6 @@ export const App = () => {
           <CarShopList id={DEFAULT_VIEW_PANELS.CAR_SHOP_LIST} setPopout={setPopout} />
           <UserCarList id={DEFAULT_VIEW_PANELS.USER_CAR_LIST} setPopout={setPopout} />
           <UserCar id={DEFAULT_VIEW_PANELS.USER_CAR} setPopout={setPopout} />
-
-          {/* <Home id="home" setPopout={setPopout} /> */}
-          {/* <Person id="person" setPopout={setPopout}/> */}
-          {/* <Persik id="persik" /> */}
         </View>
       </SplitCol>
     </SplitLayout>
