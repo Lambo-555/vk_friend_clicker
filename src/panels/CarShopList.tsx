@@ -5,6 +5,7 @@ import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
 import bridge from '@vkontakte/vk-bridge';
 import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
+import { BASE_IMG_URL } from '../constants';
 
 export interface CarShopListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -17,7 +18,7 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
   const routeNavigator = useRouteNavigator();
 
   const getCarImageById = (carId: number, imgId: number) => {
-    const localUrl = `src/assets/${carId}/${imgId}.png`;
+    const localUrl = BASE_IMG_URL + `src/assets/${carId}/${imgId}.png`;
     return localUrl;
   };
 
