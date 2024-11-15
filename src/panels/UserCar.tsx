@@ -211,7 +211,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           onClick={() => handleDamageUserCarClick(userCar?.id || 0)}
           style={{
             transform: `translate(${xOffset}px, ${yOffset}px) rotate(${(xOffset - yOffset) / 2}deg)`,
-            transition: 'transform 0.2s ease',
+            transition: 'transform 0.5s ease-in-out',
             maxWidth: 500,
           }}
         >

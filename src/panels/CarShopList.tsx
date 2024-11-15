@@ -5,7 +5,6 @@ import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
 import bridge from '@vkontakte/vk-bridge';
 import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
-import { BASE_IMG_URL } from '../constants';
 
 import photo_1_1 from '../assets/1/1.png';
 import photo_1_2 from '../assets/1/2.png';
