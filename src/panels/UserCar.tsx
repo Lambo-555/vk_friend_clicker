@@ -7,6 +7,7 @@ import { ApiService } from '../utils/ApiService';
 import './ImageSwitcher.css';
 import { DEFAULT_VIEW_PANELS } from '../routes';
 import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
+import { BASE_IMG_URL } from '../constants';
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -29,7 +30,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   const userCarIdStr: string | undefined = params?.userCarId;
 
   const getCarImageById = (carId: number, imgId: number) => {
-    const localUrl = `src/assets/${carId}/${imgId}.png`;
+    const localUrl = BASE_IMG_URL + `src/assets/${carId}/${imgId}.png`;
     return localUrl;
   };
 
@@ -178,7 +179,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           key={userCar?.id}
           subtitle={`Стоимость: ${userCar?.car?.price}`}
           caption={`Крайний удар по авто: ${damage}`}
-          src={userCar?.car?.imageNormalUrl || "https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"}
           text={
             (userData?.credits || 0) > (userCar?.car?.price || 500) ? (
               <Button

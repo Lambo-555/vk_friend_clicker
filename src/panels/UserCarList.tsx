@@ -6,6 +6,7 @@ import bridge from '@vkontakte/vk-bridge';
 import { ApiService } from '../utils/ApiService';
 import { DEFAULT_VIEW_PANELS } from '../routes';
 import { Icon28ShoppingCartOutline, Icon20DiamondOutline, Icon24HammerOutline } from '@vkontakte/icons';
+import { BASE_IMG_URL } from '../constants';
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -23,7 +24,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
   };
 
   const getCarImageById = (carId: number, imgId: number) => {
-    const localUrl = `src/assets/${carId}/${imgId}.png`;
+    const localUrl = BASE_IMG_URL + `src/assets/${carId}/${imgId}.png`;
     return localUrl;
   };
 
