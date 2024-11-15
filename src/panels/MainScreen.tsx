@@ -6,7 +6,7 @@ import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
 import bridge, { EAdsFormats } from '@vkontakte/vk-bridge';
 import { UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
-import { BASE_IMG_URL } from '../constants';
+import photo_1_1 from '../assets/1/1.png';
 
 export interface MainScreenProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -133,7 +133,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
         ТапаЛом
       </PanelHeader>
       <Placeholder
-        header={<img alt='разбитое авто' style={{ maxWidth: 300 }} src={BASE_IMG_URL + 'src/assets/1/5.png'} />}
+        header={<img alt='разбитое авто' style={{ maxWidth: 300 }} src={photo_1_1} />}
         action={
           <Link href='https://vk.com/tapoLom'>
             Наше сообщество
