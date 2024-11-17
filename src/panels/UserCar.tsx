@@ -44,6 +44,13 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   };
 
   useEffect(() => {
+    const canvasElement = document.getElementById("world") as HTMLCanvasElement;
+    const canvas = new SparkCanvas(canvasElement);
+    const manager = new SparkManager(canvas);
+    manager.animate();
+  }, [])
+
+  useEffect(() => {
     SparkCanvas
     setIsLoading(true);
     const getUserData = async () => {
@@ -206,14 +213,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     </Panel >
   );
 };
-
-window.onload = () => {
-  const canvasElement = document.getElementById("world") as HTMLCanvasElement;
-  const canvas = new SparkCanvas(canvasElement);
-  const manager = new SparkManager(canvas);
-  manager.animate();
-};
-
 
 /**
  vk-tunnel --insecure=1 --http-protocol=http --ws-protocol=wss --host=localhost --port=5173 --timeout=5000
