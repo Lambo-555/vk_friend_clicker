@@ -111,7 +111,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
             </Div>
           </>
         }>
-        Ваш гараж
+        Гараж
       </PanelHeader>
 
       {!userCarList?.length && (
@@ -150,15 +150,15 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
               text={
                 (userCarData?.state || 0) > 0 ? (
                   <ButtonGroup mode='horizontal' stretched>
-                    <Button before={<Icon24HammerOutline />} appearance='positive' loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleSelectUserCarClick(userCarData?.id!)}>
+                    <Button before={<Icon24HammerOutline />} appearance='positive' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleSelectUserCarClick(userCarData?.id!)}>
                       {(userCarData?.state || 0) > 0 ? 'Дробить!' : 'Потрачено'}
                     </Button>
-                    <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCarData?.id!)}>
+                    <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCarData?.id!)}>
                       Обменять
                     </Button>
                   </ButtonGroup>
                 ) : (
-                  <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCarData?.id!)}>
+                  <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCarData?.id!)}>
                     Обменять
                   </Button>
                 )
