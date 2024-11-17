@@ -8,6 +8,7 @@ import './ImageSwitcher.css';
 import { DEFAULT_VIEW_PANELS } from '../routes';
 import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
 import { getCarImageById } from './images';
+import { SparkCanvas, SparkManager } from './SparkCanvas';
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -43,6 +44,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   };
 
   useEffect(() => {
+    SparkCanvas
     setIsLoading(true);
     const getUserData = async () => {
       const { vk_user_id } = await bridge.send('VKWebAppGetLaunchParams');
@@ -60,12 +62,10 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   useEffect(() => {
     setIsLoading(true);
     if (!userData?.id) {
-      console.error('no userData?.id')
       setIsLoading(false);
       return;
     }
     if (!userCarIdStr) {
-      console.error('no react url param userCarId')
       setIsLoading(false);
       return;
     }
@@ -87,12 +87,10 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     setIsLoading(true);
 
     if (!userData?.id) {
-      console.error('no userData?.id')
       setIsLoading(false);
       return;
     }
     if (!userCarIdStr || !userCarId) {
-      console.error('no react url param userCarId')
       setIsLoading(false);
       return;
     }
@@ -112,9 +110,9 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     setYOffset(newYOffset);
     // Logic
     setClickCount((prev) => prev + 1);
-    if (clickCount >= 5) {
-      setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)))
+    if (clickCount >= 3) {
       setClickCount(0);
+      setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)))
       const result: UserCarEntity = await ApiService.gamageUserCar(userData.id!, Number(userCarId || userCarIdStr));
       if (result) {
         const prev = Object.assign(userCar || {}, {});
@@ -128,7 +126,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
 
   const handleExchangeUserCarCreditsClick = async (userCarId: number) => {
     if (!userData?.id) {
-      console.error('no userData?.id')
       return;
     }
     const result: UserCarEntity = await ApiService.exchangeUserCar(userData.id!, Number(userCarId));
@@ -161,9 +158,16 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
             transform: `translate(${xOffset}px, ${yOffset}px) rotate(${(xOffset - yOffset) / 2}deg)`,
             transition: 'transform 0.5s ease-in-out',
             maxWidth: 500,
+            overflow: 'hidden',
           }}
         >
+          <canvas
+            id='world'
+            style={{ position: 'absolute', zIndex: 99999, left: -150 }}
+            onClick={() => handleDamageUserCarClick(userCar?.id || 0)}
+          />
           <img
+            style={{ userSelect: 'none' }}
             src={getCarImageById(userCar?.car?.id || 1, currentCarImgIndex)}
             alt={`Image ${currentCarImgIndex}`}
             className={`image ${clickCount > 0 ? 'bright' : ''}`}
@@ -175,58 +179,41 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           subtitle={`Стоимость: ${userCar?.car?.price}`}
           caption={`Крайний удар по авто: ${damage}`}
           text={
-            (userData?.credits || 0) > (userCar?.car?.price || 500) ? (
-              <Button
-                disabled={(userCar?.state || 0) <= 0}
-                loading={isLoading}
-                size="l"
-                stretched
-                style={{ marginTop: '8px' }}
-                onClick={() => handleDamageUserCarClick(userCar?.id!)}
-              >
-                {(userCar?.state || 0) > 0 ? 'Молотить!' : 'Авто уничтожено'}
-              </Button>
-            ) : (
-              <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCar?.id!)}>
-                Обменять
-              </Button>
+            (
+              <>
+                <Button
+                  disabled={true}
+                  loading={isLoading}
+                  size="l"
+                  stretched
+                  style={{ marginTop: '8px' }}
+                  onClick={() => handleDamageUserCarClick(userCar?.id!)}
+                >
+                  {(userCar?.state || 0) > 0 ? 'Авто не добито' : 'Уничтожено'}
+                </Button>
+                {(userCar?.state || 0) <= 0 && (
+                  <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCar?.id!)}>
+                    Обменять +{userCar?.credits || 0}
+                  </Button>
+                )}
+
+              </>
             )
           }
           maxHeight={250}
         />
       </Placeholder>
-
-      {/* 
-      <Placeholder
-        icon={<Icon56MessageReadOutline />}
-        action={
-          <Button size="m" mode="tertiary">
-            Показать все сообщения
-          </Button>
-        }
-        stretched
-      >
-        Нет непрочитанных
-        <br />
-        сообщений
-      </Placeholder> */}
-
-      {/* <CardGrid size="l" spaced>
-        <ContentCard
-          header={userCar.brand + ' ' + userCar.model}
-          key={userCar.id}
-          src="https://images.unsplash.com/photo-1603988492906-4fb0fb251cf8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1600&q=80"
-          text={
-            <Button size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleUserCarClick(userCar.id)}>
-              Выбрать
-            </Button>
-          }
-          maxHeight={250}
-        ></ContentCard>
-      </CardGrid> */}
     </Panel >
   );
 };
+
+window.onload = () => {
+  const canvasElement = document.getElementById("world") as HTMLCanvasElement;
+  const canvas = new SparkCanvas(canvasElement);
+  const manager = new SparkManager(canvas);
+  manager.animate();
+};
+
 
 /**
  vk-tunnel --insecure=1 --http-protocol=http --ws-protocol=wss --host=localhost --port=5173 --timeout=5000
