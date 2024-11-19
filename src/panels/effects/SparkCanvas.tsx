@@ -13,9 +13,9 @@ export class SparkCanvas {
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
-    this.context = this.canvas.getContext('2d')!;
-    this.width = this.canvas.width = 800;//window.innerWidth;
-    this.height = this.canvas.height = 300;//window.innerHeight;
+    this.context = this.canvas.getContext("2d")!;
+    this.width = this.canvas.width = 800; //window.innerWidth;
+    this.height = this.canvas.height = 300; //window.innerHeight;
   }
 
   public clearRect(): void {
@@ -48,14 +48,18 @@ export class Spark implements ISpark {
     this.radius = Math.random() * 2 + 1; // случайный радиус от 1.5 до 3.5
 
     // Рассчитываем расстояние от клика до центра канваса
-    const centerX = canvas.width / 2;
+    const centerX = window.innerWidth / 2; //canvas.width / 2;
     const centerY = canvas.height / 2;
-    const distanceFromCenter = Math.sqrt(Math.pow(clickX - centerX, 2) + Math.pow(clickY - centerY, 2));
+    const distanceFromCenter = Math.sqrt(
+      Math.pow(clickX - centerX, 2) + Math.pow(clickY - centerY, 2)
+    );
 
     // Устанавливаем скорость в зависимости от расстояния от центра
     const speedFactor = Math.min(distanceFromCenter / 100, 2); // Ограничиваем максимальную скорость
-    this.velocityX = (clickX < centerX ? -1 : 1) * ((Math.random() * 2 - 0.5) + speedFactor); // скорость влево или вправо
-    this.velocityY = (clickY < centerY ? -1 : 1) * ((Math.random() * 2 - 0.5) + speedFactor); // скорость вверх или вниз
+    this.velocityX =
+      (clickX < centerX ? -1 : 1) * (Math.random() * 2 - 0.5 + speedFactor); // скорость влево или вправо
+    this.velocityY =
+      (clickY < centerY ? -1 : 1) * (Math.random() * 2 - 0.5 + speedFactor); // скорость вверх или вниз
   }
 
   public update(): void {
@@ -71,7 +75,9 @@ export class Spark implements ISpark {
         this.posX,
         this.posY,
         this.radius,
-        `rgba(${255 - Math.random() * 75}, ${255 - Math.random() * 75}, 0, ${this.opacity})`,
+        `rgba(${255 - Math.random() * 75}, ${255 - Math.random() * 75}, 0, ${
+          this.opacity
+        })`
       );
     }
   }
@@ -88,7 +94,7 @@ export class SparkManager {
 
   constructor(canvas: SparkCanvas) {
     this.canvas = canvas;
-    this.canvas.canvas.addEventListener('click', this.handleClick.bind(this));
+    this.canvas.canvas.addEventListener("click", this.handleClick.bind(this));
   }
 
   private handleClick(event: MouseEvent): void {
@@ -117,9 +123,9 @@ export class SparkManager {
 }
 
 // Инициализация
-window.onload = () => {
-  const canvasElement = document.getElementById("world") as HTMLCanvasElement;
-  const canvas = new SparkCanvas(canvasElement);
-  const manager = new SparkManager(canvas);
-  manager.animate();
-};
+// window.onload = () => {
+//   const canvasElement = document.getElementById("world") as HTMLCanvasElement;
+//   const canvas = new SparkCanvas(canvasElement);
+//   const manager = new SparkManager(canvas);
+//   manager.animate();
+// };

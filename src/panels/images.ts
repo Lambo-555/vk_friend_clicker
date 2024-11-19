@@ -93,5 +93,19 @@ export const getCarImageById = (carId: number, imgId: number): string => {
             10: photo_4_10,
         }
     }
-    return images[carId][imgId];
+    return images?.[carId]?.[imgId];
+};
+
+export const getToolImageById = (toolId: number, imgId: number): string => {
+    const images: { [key: string]: { [key: string]: any } } = {
+        1: {
+            1: photo_1_1,
+            2: photo_1_2,
+        },
+        2: {
+            1: photo_2_1,
+            2: photo_2_2,
+        },
+    }
+    return images[toolId][imgId];
 };

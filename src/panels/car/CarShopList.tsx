@@ -1,11 +1,11 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Button, ContentCard, Div, Flex, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Snackbar, Spinner } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { CarEntity, UserCarEntity, UserEntity } from '../utils/types';
-import { ApiService } from '../utils/ApiService';
 import bridge from '@vkontakte/vk-bridge';
 import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
-import { getCarImageById } from './images';
+import { ApiService } from '../../utils/ApiService';
+import { CarEntity, UserEntity, UserCarEntity } from '../../utils/types';
+import { getCarImageById } from '../images';
 
 export interface CarShopListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -68,7 +68,6 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
 
     const result: UserCarEntity = await ApiService.buyUserCar(userData.id, carId);
     if (result) {
-      console.log('deal success', result)
       openSnackbar(
         `Модель ${result.car?.name || 'basecar'} куплена за ${result.car?.price || 0}`,
         <Icon20CheckCircleFillGreen />
@@ -99,7 +98,7 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout }) => {
         }>
         Свалка
       </PanelHeader>
-      <Flex direction='row' margin='auto' gap='l'>
+      <Flex direction='row' margin='auto' gap='l' justify='center'>
         {!carList.length && (
           <Spinner size="large" />
         )}

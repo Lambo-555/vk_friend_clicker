@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { CarEntity, UserCarEntity, UserEntity, UserFriendEntity } from './types';
-import { API_URL } from '../constants';
+import { CarEntity, ToolEntity, UserCarEntity, UserEntity, UserFriendEntity, UserToolEntity } from './types';
+import { API_URL } from './constants';
 
 export class ApiService {
     // Car API
@@ -35,7 +35,7 @@ export class ApiService {
         return response.data;
     };
 
-    static async gamageUserCar(userId: number, userCarId: number): Promise<UserCarEntity> {
+    static async damageUserCar(userId: number, userCarId: number): Promise<UserCarEntity> {
         const response = await axios.post(`${API_URL}/cars/user/${userId}/car/${userCarId}/damage`);
         return response.data;
     };
@@ -74,6 +74,54 @@ export class ApiService {
 
     static async addInviteBonus(userId: number): Promise<UserEntity> {
         const response = await axios.get(`${API_URL}/users/addInviteBonus/${userId}`);
+        return response.data;
+    };
+
+
+    // Tool
+
+    static async getToolList(): Promise<ToolEntity[]> {
+        const response = await axios.get(`${API_URL}/tools`);
+        return response.data;
+    };
+
+    static async getTool(toolId: number): Promise<ToolEntity> {
+        const response = await axios.get(`${API_URL}/tools/${toolId}`);
+        return response.data;
+    };
+
+    static async getUserToolList(userId: number): Promise<UserToolEntity[]> {
+        const response = await axios.get(`${API_URL}/tools/${userId}/user-tools`);
+        return response.data;
+    };
+
+    static async buyUserTool(userId: number, toolId: number): Promise<UserToolEntity> {
+        const response = await axios.post(`${API_URL}/tools/${userId}/buy/${toolId}`);
+        return response.data;
+    };
+
+    static async removeUserTool(userId: number, userToolId: number): Promise<UserToolEntity> {
+        const response = await axios.delete(`${API_URL}/tools/${userId}/user-tools/${userToolId}`);
+        return response.data;
+    };
+
+    static async exchangeUserTool(userId: number, userToolId: number): Promise<UserToolEntity> {
+        const response = await axios.put(`${API_URL}/tools/${userId}/user-tools/${userToolId}/exchange`);
+        return response.data;
+    };
+
+    static async getUpgradeUserToolPrice(userToolId: number): Promise<number> {
+        const response = await axios.get(`${API_URL}/user-tools/${userToolId}/upgrade-price`);
+        return response.data;
+    };
+
+    static async upgradeUserTool(userToolId: number): Promise<UserToolEntity> {
+        const response = await axios.put(`${API_URL}/tools/user-tools/${userToolId}/upgrade`);
+        return response.data;
+    };
+
+    static async selectUserTool(userToolId: number): Promise<UserToolEntity> {
+        const response = await axios.put(`${API_URL}/tools/user-tools/${userToolId}/select`);
         return response.data;
     };
 }

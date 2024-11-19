@@ -1,12 +1,12 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Button, ButtonGroup, ContentCard, Div, Flex, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Snackbar } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
-import { ApiService } from '../utils/ApiService';
-import { DEFAULT_VIEW_PANELS } from '../routes';
 import { Icon28ShoppingCartOutline, Icon20DiamondOutline, Icon24HammerOutline } from '@vkontakte/icons';
-import { getCarImageById } from './images';
+import { DEFAULT_VIEW_PANELS } from '../../routes';
+import { ApiService } from '../../utils/ApiService';
+import { UserCarEntity, UserEntity } from '../../utils/types';
+import { getCarImageById } from '../images';
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -130,7 +130,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
         </Div>
       )}
 
-      <Flex direction='row' margin='auto' gap='m' >
+      <Flex direction='row' margin='auto' gap='l' justify='center'>
         {userCarList?.map((userCarData) => {
           const imgIdx = calculateImgIndex(1000 - (userCarData?.state || 1));
           return (

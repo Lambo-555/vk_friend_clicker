@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useState, } from 'react';
-import { Button, ButtonGroup, Div, Link, NavIdProps, Panel, PanelHeader, Placeholder, Separator, Snackbar, Spacing } from '@vkontakte/vkui';
+import { Button, ButtonGroup, Div, Link, NavIdProps, Panel, PanelHeader, Placeholder, Separator, Snackbar } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28CarOutline, Icon28StarCircleFillBlue, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline } from '@vkontakte/icons';
+import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28CarOutline, Icon28StarCircleFillBlue, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline, Icon28Cards2Outline } from '@vkontakte/icons';
 import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
 import bridge, { EAdsFormats } from '@vkontakte/vk-bridge';
 import { UserEntity } from '../utils/types';
@@ -43,9 +43,10 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
     getUserData();
   }, [])
 
-  const handleGoToCarShop = () => routeNavigator.push(DEFAULT_VIEW_PANELS.CAR_SHOP_LIST);
-  const handleGoToUserCarList = () => routeNavigator.push(DEFAULT_VIEW_PANELS.USER_CAR_LIST);
-  const handleGoToUserToolList = () => routeNavigator.push(DEFAULT_VIEW_PANELS.USER_CAR_LIST);
+  const handleGoToCarShop = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.CAR_SHOP_LIST}`);
+  const handleGoToUserCarList = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`);
+  const handleGoToToolShop = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST}`);
+  const handleGoToUserToolList = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_TOOL_LIST}`);
   const handleShowOnboarding = () => setCurrentModal(DEFAULT_MODALS.WELCOME_1);
   const handleShowAds = async () => {
     try {
@@ -125,7 +126,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
             mode="outline"
             appearance="positive"
             size="m"
-            style={{minWidth: 75}}
+            style={{ minWidth: 75 }}
           >{userData?.credits || 0}
           </Button>
         </Div>
@@ -143,27 +144,52 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       >
         <Div>
           <ButtonGroup mode="vertical" gap="m" style={{ minWidth: 328 }}>
-            <Button before={<Icon28ShoppingCartOutline />} onClick={handleGoToCarShop} size="l" appearance="accent" stretched>
-              Свалка
-            </Button>
-            <Button before={<Icon28CarOutline />} onClick={handleGoToUserCarList} size="l" appearance="accent" stretched>
-              Ваш гараж
-            </Button>
-            <Button disabled before={<Icon24HammerOutline />} onClick={handleGoToUserToolList} size="l" appearance="accent" stretched>
-              Инструменты (WIP)
-            </Button>
-            <Spacing size={12}>
-              <Separator />
-            </Spacing>
-            <Button before={<Icon28UserAddOutline />} onClick={handleInviteFriends} size="l" appearance="neutral" stretched>
-              Пригласить друзей
-            </Button>
-            {/* <Button before={<Icon28MoneyWadOutline />} onClick={() => { }} size="l" appearance="neutral" stretched>
-              Посмотреть рекламу
-            </Button> */}
-            <Button before={<Icon28StarCircleFillBlue />} onClick={handleToFavorites} size="l" appearance="neutral" stretched>
-              В избранное
-            </Button>
+            <ButtonGroup
+              mode="horizontal"
+              gap="m"
+              stretched
+              style={{ background: "rgb(115,143,162)", borderRadius: 10 }}
+            >
+              <Button before={<Icon28ShoppingCartOutline />} onClick={handleGoToCarShop} size="l" appearance="accent" stretched>
+                Свалка
+              </Button>
+              <Button before={<Icon28CarOutline />} onClick={handleGoToUserCarList} size="l" appearance="accent" stretched>
+                Гараж
+              </Button>
+            </ButtonGroup>
+
+            <ButtonGroup
+              mode="horizontal"
+              gap="m"
+              stretched
+              style={{ background: "rgb(115,143,162)", borderRadius: 10 }}
+            >
+              <Button before={<Icon24HammerOutline />} onClick={handleGoToToolShop} size="l" appearance="accent" stretched>
+                Hummers
+              </Button>
+              <Button before={<Icon28Cards2Outline />} onClick={handleGoToUserToolList} size="l" appearance="accent" stretched>
+                Sumka
+              </Button>
+            </ButtonGroup>
+
+            <Separator />
+
+            <ButtonGroup
+              mode="vertical"
+              gap="m"
+              stretched
+              style={{ background: "rgb(5,43,62)", borderRadius: 10 }}
+            >
+              <Button before={<Icon28UserAddOutline />} onClick={handleInviteFriends} size="l" appearance="neutral" stretched>
+                Пригласить друзей
+              </Button>
+              <Button before={<Icon28StarCircleFillBlue />} onClick={handleToFavorites} size="l" appearance="neutral" stretched>
+                В избранное
+              </Button>
+            </ButtonGroup>
+
+            <Separator />
+
             <ButtonGroup mode="horizontal" gap="m" stretched>
               <Button before={<Icon28AccessibilityOutline />} onClick={handleShowOnboarding} size="l" appearance="positive" stretched>
                 Обучение

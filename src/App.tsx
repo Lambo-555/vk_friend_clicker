@@ -3,14 +3,16 @@ import { View, SplitLayout, SplitCol, ModalRoot } from '@vkontakte/vkui';
 import { useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
 
 import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from './routes';
-import { CarShopList } from './panels/CarShopList';
-import { UserCarList } from './panels/UserCarList';
-import { UserCar } from './panels/UserCar';
-import { MainScreen } from './panels/MainScreen';
 import { WelcomeOnboarding, DamageOnboarding, BuyOnboarding, InviteOnboarding, AdsOnboarding } from './modals/Onboarding.modal';
 import bridge from '@vkontakte/vk-bridge';
 import { ApiService } from './utils/ApiService';
 import { UserEntity } from './utils/types';
+import { UserCar } from './panels/car/UserCar';
+import { UserCarList } from './panels/car/UserCarList';
+import { MainScreen } from './panels/MainScreen';
+import { ToolShopList } from './panels/tool/ToolShopList';
+import { UserToolList } from './panels/tool/UserToolList';
+import { CarShopList } from './panels/car/CarShopList';
 
 export const App = () => {
   const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME } = useActiveVkuiLocation();
@@ -63,6 +65,8 @@ export const App = () => {
           <CarShopList id={DEFAULT_VIEW_PANELS.CAR_SHOP_LIST} setPopout={setPopout} />
           <UserCarList id={DEFAULT_VIEW_PANELS.USER_CAR_LIST} setPopout={setPopout} />
           <UserCar id={DEFAULT_VIEW_PANELS.USER_CAR} setPopout={setPopout} />
+          <ToolShopList id={DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST} setPopout={setPopout} />
+          <UserToolList id={DEFAULT_VIEW_PANELS.USER_TOOL_LIST} setPopout={setPopout} />
         </View>
       </SplitCol>
     </SplitLayout>

@@ -1,14 +1,16 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { Button, ContentCard, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, SimpleCell, Snackbar } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { UserCarEntity, UserEntity } from '../utils/types';
 import bridge from '@vkontakte/vk-bridge';
-import { ApiService } from '../utils/ApiService';
 import './ImageSwitcher.css';
-import { DEFAULT_VIEW_PANELS } from '../routes';
 import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
-import { getCarImageById } from './images';
-import { SparkCanvas, SparkManager } from './SparkCanvas';
+import { DEFAULT_VIEW_PANELS } from '../../routes';
+import { ApiService } from '../../utils/ApiService';
+import { UserCarEntity, UserEntity } from '../../utils/types';
+import { SparkCanvas, SparkManager } from '../effects/SparkCanvas';
+import { getCarImageById } from '../images';
+
+// TODO добавить отображение инструмента, добавить учет инструмента при тапах по автомобилю, показывать состояние инструмента
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -117,10 +119,10 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     setYOffset(newYOffset);
     // Logic
     setClickCount((prev) => prev + 1);
-    if (clickCount >= 3) {
+    if (clickCount > 2) {
       setClickCount(0);
       setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)))
-      const result: UserCarEntity = await ApiService.gamageUserCar(userData.id!, Number(userCarId || userCarIdStr));
+      const result: UserCarEntity = await ApiService.damageUserCar(userData.id!, Number(userCarId || userCarIdStr));
       if (result) {
         const prev = Object.assign(userCar || {}, {});
         const damageDiff = (prev?.state || 1001) - (result?.state || 0);
@@ -160,7 +162,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       >
         <div
           className={`image-container ${clickCount > 0 ? 'active' : ''}`}
-          onClick={() => handleDamageUserCarClick(userCar?.id || 0)}
           style={{
             transform: `translate(${xOffset}px, ${yOffset}px) rotate(${(xOffset - yOffset) / 2}deg)`,
             transition: 'transform 0.5s ease-in-out',
@@ -194,7 +195,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
                   size="l"
                   stretched
                   style={{ marginTop: '8px' }}
-                  onClick={() => handleDamageUserCarClick(userCar?.id!)}
                 >
                   {(userCar?.state || 0) > 0 ? 'Авто не добито' : 'Уничтожено'}
                 </Button>
