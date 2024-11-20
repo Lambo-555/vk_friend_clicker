@@ -42,6 +42,11 @@ import photo_4_8 from '../assets/4/8.png';
 import photo_4_9 from '../assets/4/9.png';
 import photo_4_10 from '../assets/4/10.png';
 
+import hummer_1_1 from '../assets/hummers/1/1.png';
+import hummer_1_2 from '../assets/hummers/1/2.png';
+import hummer_2_1 from '../assets/hummers/2/1.png';
+import hummer_2_2 from '../assets/hummers/2/2.png';
+
 export const getCarImageById = (carId: number, imgId: number): string => {
     const images: { [key: string]: { [key: string]: any } } = {
         1: {
@@ -99,12 +104,12 @@ export const getCarImageById = (carId: number, imgId: number): string => {
 export const getToolImageById = (toolId: number, imgId: number): string => {
     const images: { [key: string]: { [key: string]: any } } = {
         1: {
-            1: photo_1_1,
-            2: photo_1_2,
+            1: hummer_1_1,
+            2: hummer_1_2,
         },
         2: {
-            1: photo_2_1,
-            2: photo_2_2,
+            1: hummer_2_1,
+            2: hummer_2_2,
         },
     }
     return images[toolId][imgId];
