@@ -1,7 +1,47 @@
+import { getCarImageById } from "../images";
+
 interface ISpark {
   draw(): void;
   update(): void;
   isAlive(): boolean; // Добавляем метод isAlive
+}
+
+export class DamageText {
+  private posX: number;
+  private posY: number;
+  private velocityY: number;
+  private text: string;
+  private canvas: SparkCanvas;
+  private opacity: number = 1;
+
+  constructor(canvas: SparkCanvas, clickX: number, clickY: number, damageValue: number) {
+    const randomText = ['OMG', 'Ого', 'Бро', 'Круть', 'DDos', 'Сила'];
+    const addText = randomText[Math.floor(randomText.length * Math.random())];
+    this.canvas = canvas;
+    this.posX = clickX;
+    this.posY = clickY;
+    this.text = `-${damageValue} ` + (Math.random() > 0.85 ? addText : '');
+    this.velocityY = -1;
+  }
+
+  public update(): void {
+    this.posY += this.velocityY;
+    this.opacity -= 0.01; // Adjust the opacity decrement rate
+  }
+
+  public draw(): void {
+    if (this.opacity > 0) {
+      if (this.canvas) {
+        this.canvas.context.fillStyle = `rgba(225, 205, 0, ${this.opacity})`;
+        this.canvas.context.font = "bold 24px Consolas Roboto Helvetica";
+        this.canvas.context.fillText(this.text, this.posX, this.posY);
+      }
+    }
+  }
+
+  public isAlive(): boolean {
+    return this.opacity > 0;
+  }
 }
 
 // Класс Canvas
@@ -14,12 +54,20 @@ export class SparkCanvas {
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.context = this.canvas.getContext("2d")!;
-    this.width = this.canvas.width = 800; //window.innerWidth;
-    this.height = this.canvas.height = 300; //window.innerHeight;
+    this.width = this.canvas.width = 960 / 2.5; //window.innerWidth;
+    this.height = this.canvas.height = 540 / 2.5; //window.innerHeight;
   }
 
   public clearRect(): void {
     this.context.clearRect(0, 0, this.width, this.height);
+  }
+
+  public drawImage(imageUrl: string, x: number, y: number, width: number, height: number): void {
+    const img = new Image();
+    img.onload = () => {
+      this.context.drawImage(img, x, y, width, height);
+    };
+    img.src = imageUrl;
   }
 
   public drawCircle(x: number, y: number, r: number, style: string): void {
@@ -48,14 +96,14 @@ export class Spark implements ISpark {
     this.radius = Math.random() * 2 + 1; // случайный радиус от 1.5 до 3.5
 
     // Рассчитываем расстояние от клика до центра канваса
-    const centerX = window.innerWidth / 2; //canvas.width / 2;
+    const centerX = canvas.width / 2; //canvas.width / 2;
     const centerY = canvas.height / 2;
     const distanceFromCenter = Math.sqrt(
       Math.pow(clickX - centerX, 2) + Math.pow(clickY - centerY, 2)
     );
 
     // Устанавливаем скорость в зависимости от расстояния от центра
-    const speedFactor = Math.min(distanceFromCenter / 100, 2); // Ограничиваем максимальную скорость
+    const speedFactor = Math.min(distanceFromCenter / 100, 4); // Ограничиваем максимальную скорость
     this.velocityX =
       (clickX < centerX ? -1 : 1) * (Math.random() * 2 - 0.5 + speedFactor); // скорость влево или вправо
     this.velocityY =
@@ -63,7 +111,7 @@ export class Spark implements ISpark {
   }
 
   public update(): void {
-    this.gravity += 0.05;
+    this.gravity += 0.1;
     this.posX += this.velocityX;
     this.posY += this.velocityY + this.gravity;
     this.opacity -= 0.02; // уменьшаем непрозрачность
@@ -75,8 +123,7 @@ export class Spark implements ISpark {
         this.posX,
         this.posY,
         this.radius,
-        `rgba(${255 - Math.random() * 75}, ${255 - Math.random() * 75}, 0, ${
-          this.opacity
+        `rgba(${255 - Math.random() * 75}, ${255 - Math.random() * 75}, 0, ${this.opacity
         })`
       );
     }
@@ -90,26 +137,41 @@ export class Spark implements ISpark {
 // Класс SparkManager
 export class SparkManager {
   private sparks: ISpark[] = [];
+  private damageTextList: DamageText[] = [];
   private canvas: SparkCanvas;
 
   constructor(canvas: SparkCanvas) {
     this.canvas = canvas;
-    this.canvas.canvas.addEventListener("click", this.handleClick.bind(this));
   }
 
-  private handleClick(event: MouseEvent): void {
+  public handleClick(event: MouseEvent, damageValue: number): void {
     const rect = this.canvas.canvas.getBoundingClientRect();
     const clickX = event.clientX - rect.left;
     const clickY = event.clientY - rect.top;
-    const sparksCount = Math.round(Math.random() * 10) + 1;
+    const sparksCount = Math.round(Math.random() * 20) + 10;
+
+    this.damageTextList.push(new DamageText(this.canvas, clickX, clickY, damageValue));
+
     for (let i = 0; i < sparksCount; i++) {
       this.sparks.push(new Spark(this.canvas, clickX, clickY));
     }
   }
 
+  public changeCarImage(carId: number, stateId: number): void {
+    this.image = getCarImageById(carId, stateId);
+  }
+
   public animate(): void {
     requestAnimationFrame(this.animate.bind(this));
     this.canvas.clearRect();
+
+    this.damageTextList.forEach((damageText, index) => {
+      damageText.update();
+      damageText.draw();
+      if (!damageText.isAlive()) {
+        this.damageTextList.splice(index, 1); // удаляем текст, который исчез
+      }
+    })
 
     // Обновляем и рисуем искры
     this.sparks.forEach((spark, index) => {

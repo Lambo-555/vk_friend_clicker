@@ -78,7 +78,7 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
       setUserToolList(newUserToolList);
       openSnackbar(
         setPopout,
-        `Инструмент "${result.tool?.name || 'basetool'}" selected`,
+        `Молот "${result.tool?.name || 'basetool'}" выбран`,
         <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
       )
     }
@@ -98,7 +98,7 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
       setUserToolList(newUserToolList);
       openSnackbar(
         setPopout,
-        `Инструмент "${result.tool?.name || 'basetool'}" upgraded`,
+        `Молот "${result.tool?.name || 'basetool'}" upgraded`,
         <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
       )
     }
@@ -116,7 +116,7 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
       )
       openSnackbar(
         setPopout,
-        `Инструмент "${result.tool?.name || 'basetool'}" продан за ${Math.round((result?.tool?.price || 1) * (result?.state || 1) / 1000)
+        `Молот "${result.tool?.name || 'basetool'}" продан за ${Math.round((result?.tool?.price || 1) * (result?.state || 1) / 1000)
         }`,
         <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
       )

@@ -31,6 +31,35 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
   };
 
   useEffect(() => {
+    const autoRegistration = async () => {
+      console.log('autoregistration start');
+      const { vk_user_id } = await bridge.send('VKWebAppGetLaunchParams');
+
+      if (vk_user_id) {
+        const dbUserData: UserEntity = await ApiService.getVkUserByVkId(vk_user_id);
+
+        if (!dbUserData) {
+          const vkUserData = await bridge.send('VKWebAppGetUserInfo', { user_id: Number(vk_user_id) });
+
+          if (vkUserData) {
+            const user: UserEntity = await ApiService.registerUser({
+              first_name: vkUserData.first_name,
+              last_name: vkUserData?.last_name || 'Неизвестов',
+              photo_200: vkUserData.photo_200,
+              city: vkUserData?.city?.title || 'Градополь',
+              credits: 250,
+              vk_user_id: vk_user_id,
+            });
+            setUserData(user);
+            console.log(`${user.first_name} зарегистрирован`);
+          }
+        }
+      }
+    }
+    autoRegistration();
+  }, [])
+
+  useEffect(() => {
     const getUserData = async () => {
       const { vk_user_id } = await bridge.send('VKWebAppGetLaunchParams');
       if (vk_user_id) {
@@ -72,6 +101,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       console.error(error);
     }
   }
+
   const handleToFavorites = async () => {
     try {
       const toFavorites = await bridge.send('VKWebAppAddToFavorites', { request_id: 'from_main_menu' });

@@ -23,6 +23,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentCarImgIndex, setCurrentCarImgIndex] = useState<number>(0);
   const [clickCount, setClickCount] = useState<number>(0);
+  const [sparkManager, setSparkManager] = useState<SparkManager | null>(null);
 
   const [xOffset, setXOffset] = useState<number>(0);
   const [yOffset, setYOffset] = useState<number>(0);
@@ -49,6 +50,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     const canvasElement = document.getElementById("world") as HTMLCanvasElement;
     const canvas = new SparkCanvas(canvasElement);
     const manager = new SparkManager(canvas);
+    setSparkManager(manager);
     manager.animate();
   }, [])
 
@@ -92,19 +94,14 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     return Math.min(Math.floor(num / 100) + 1, 10);
   }
 
-  const handleDamageUserCarClick = async (userCarId: number) => {
-    setIsLoading(true);
-
+  const handleDamageUserCarClick = async (userCarId: number, e: MouseEvent) => {
     if (!userData?.id) {
-      setIsLoading(false);
       return;
     }
     if (!userCarIdStr || !userCarId) {
-      setIsLoading(false);
       return;
     }
     if ((userCar?.state || 0) <= 0) {
-      setIsLoading(false);
       openSnackbar(
         `Модель ${userCar?.car?.name || 'basecar'} полностью уничтожена`,
         <Icon20CheckCircleFillGreen />
@@ -118,19 +115,18 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     setXOffset(newXOffset);
     setYOffset(newYOffset);
     // Logic
-    setClickCount((prev) => prev + 1);
-    if (clickCount > 2) {
-      setClickCount(0);
-      setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)))
-      const result: UserCarEntity = await ApiService.damageUserCar(userData.id!, Number(userCarId || userCarIdStr));
-      if (result) {
-        const prev = Object.assign(userCar || {}, {});
-        const damageDiff = (prev?.state || 1001) - (result?.state || 0);
-        setDamage(damageDiff)
-        setUserCar(result);
+    setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)))
+    // if (Math.random() > 0.6) return;
+    const result: UserCarEntity = await ApiService.damageUserCar(userData.id!, Number(userCarId || userCarIdStr));
+    if (result) {
+      const prev = Object.assign(userCar || {}, {});
+      const damageValue = (prev?.state || 1001) - (result?.state || 0);
+      setDamage(damageValue)
+      setUserCar(result);
+      if (sparkManager) {
+        sparkManager.handleClick(e, damageValue);
       }
     }
-    setIsLoading(false);
   }
 
   const handleExchangeUserCarCreditsClick = async (userCarId: number) => {
@@ -171,8 +167,8 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
         >
           <canvas
             id='world'
-            style={{ position: 'absolute', zIndex: 99999, left: -150 }}
-            onClick={() => handleDamageUserCarClick(userCar?.id || 0)}
+            style={{ position: 'absolute', zIndex: 99999 }}
+            onClick={(e: any) => handleDamageUserCarClick(userCar?.id || 0, e)}
           />
           <img
             style={{ userSelect: 'none' }}
@@ -185,7 +181,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           header={userCar?.car?.name}
           key={userCar?.id}
           subtitle={`Стоимость: ${userCar?.car?.price}`}
-          caption={`Крайний удар по авто: ${damage}`}
+          // caption={`Крайний удар по авто: ${damage}`}
           text={
             (
               <>
@@ -203,7 +199,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
                     Обменять +{userCar?.credits || 0}
                   </Button>
                 )}
-
               </>
             )
           }

@@ -94,10 +94,10 @@ export const ToolShopList: FC<ToolShopListProps> = ({ id, setPopout }) => {
           return (
             <ContentCard
               style={{ maxWidth: 350 }}
-              header={`${tool?.name || 'error'} (${tool?.price || 'error'})`}
+              header={`"${tool?.name || 'error'}"`}
               key={index}
-              caption={'Позволяет наносить больше урона!'}
-              subtitle={`Инструмент`}
+              caption={'Наноси больше урона!'}
+              subtitle={`Молот`}
               src={getToolImageById(tool?.id || 1, 1)}
 
               text={
