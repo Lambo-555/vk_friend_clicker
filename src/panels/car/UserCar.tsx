@@ -116,7 +116,9 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     setYOffset(newYOffset);
     // Logic
     setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)))
-    // if (Math.random() > 0.6) return;
+    setClickCount(prev => prev + 1);
+    if (Math.random() < 0.65) return;
+    setClickCount(0);
     const result: UserCarEntity = await ApiService.damageUserCar(userData.id!, Number(userCarId || userCarIdStr));
     if (result) {
       const prev = Object.assign(userCar || {}, {});

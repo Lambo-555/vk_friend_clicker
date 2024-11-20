@@ -157,10 +157,6 @@ export class SparkManager {
     }
   }
 
-  public changeCarImage(carId: number, stateId: number): void {
-    this.image = getCarImageById(carId, stateId);
-  }
-
   public animate(): void {
     requestAnimationFrame(this.animate.bind(this));
     this.canvas.clearRect();
