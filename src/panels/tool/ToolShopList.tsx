@@ -84,7 +84,7 @@ export const ToolShopList: FC<ToolShopListProps> = ({ id, setPopout }) => {
             </Div>
           </>
         }>
-        Магаз
+        Молоты
       </PanelHeader>
       <Flex direction='row' margin='auto' gap='l' justify='center'>
         {!toolList.length && (
@@ -96,7 +96,7 @@ export const ToolShopList: FC<ToolShopListProps> = ({ id, setPopout }) => {
               style={{ maxWidth: 350 }}
               header={`${tool?.name || 'error'} (${tool?.price || 'error'})`}
               key={index}
-              caption={'Bolshe damaga!'}
+              caption={'Позволяет наносить больше урона!'}
               subtitle={`Инструмент`}
               src={getToolImageById(tool?.id || 1, 1)}
 

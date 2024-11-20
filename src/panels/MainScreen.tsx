@@ -148,7 +148,6 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
               mode="horizontal"
               gap="m"
               stretched
-              style={{ background: "rgb(115,143,162)", borderRadius: 10 }}
             >
               <Button before={<Icon28ShoppingCartOutline />} onClick={handleGoToCarShop} size="l" appearance="accent" stretched>
                 Свалка
@@ -162,13 +161,12 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
               mode="horizontal"
               gap="m"
               stretched
-              style={{ background: "rgb(115,143,162)", borderRadius: 10 }}
             >
               <Button before={<Icon24HammerOutline />} onClick={handleGoToToolShop} size="l" appearance="accent" stretched>
-                Hummers
+                Молоты
               </Button>
               <Button before={<Icon28Cards2Outline />} onClick={handleGoToUserToolList} size="l" appearance="accent" stretched>
-                Sumka
+                Пояс
               </Button>
             </ButtonGroup>
 
@@ -178,7 +176,6 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
               mode="vertical"
               gap="m"
               stretched
-              style={{ background: "rgb(5,43,62)", borderRadius: 10 }}
             >
               <Button before={<Icon28UserAddOutline />} onClick={handleInviteFriends} size="l" appearance="neutral" stretched>
                 Пригласить друзей

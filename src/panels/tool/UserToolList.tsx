@@ -142,12 +142,12 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
             </Div>
           </>
         }>
-        Инструмент
+        Пояс
       </PanelHeader>
 
       {!userToolList?.length && (
         <Div>
-          <Group mode='card' header={<Header mode="secondary">Ваш гараж пуст</Header>}>
+          <Group mode='card' header={<Header mode="secondary">Ваш пояс пуст</Header>}>
             <Button
               before={<Icon28ShoppingCartOutline />}
               size="l"
@@ -170,13 +170,13 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
               maxHeight={250}
               header={
                 <ContentCard
-                  header={`Tool: ${userToolData?.tool?.name}. Номер: ${userToolData?.id}`}
+                  header={`Молот: ${userToolData?.tool?.name}. Номер: ${userToolData?.id}`}
                   caption={`Состояние: ${userToolData?.state}`}
                   text={`Кредиты: ${userToolData?.tool?.price}`}
                 />
               }
               key={userToolData.id}
-              subtitle={`lvl: ${userToolData?.level} (${(userToolData?.level || 1) * (userToolData?.tool?.additionalDamagePerLevel || 1)} dmg)`}
+              subtitle={`lvl: ${userToolData?.level} (${(userToolData?.level || 1) * (userToolData?.tool?.additionalDamagePerLevel || 1)} урона)`}
               src={getToolImageById(userToolData.tool?.id || 1, imgIdx)}
               text={
                 <ButtonGroup mode='vertical' stretched>
@@ -204,7 +204,7 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
                         style={{ marginTop: '8px' }}
                         onClick={() => handleUpgradeUserToolClick(userToolData?.id!)}
                       >
-                        lvlup (+{userToolData.tool?.additionalDamagePerLevel} dmg)(-{calcUpgradePrice(userToolData)} cred)
+                        UP! (+{userToolData.tool?.additionalDamagePerLevel} урона)(-{calcUpgradePrice(userToolData)} кредитов)
                       </Button>
                     </>
                   )}
