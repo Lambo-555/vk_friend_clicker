@@ -1,9 +1,9 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ContentCard, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, SimpleCell, Snackbar } from '@vkontakte/vkui';
+import { Button, ContentCard, FormItem, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Progress, SimpleCell, Snackbar } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import bridge from '@vkontakte/vk-bridge';
 import './ImageSwitcher.css';
-import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
+import { Icon20CheckCircleFillGreen, Icon20CupOutline, Icon20DiamondOutline, Icon20StatisticsOutline, Icon24HammerOutline } from '@vkontakte/icons';
 import { DEFAULT_VIEW_PANELS } from '../../routes';
 import { ApiService } from '../../utils/ApiService';
 import { UserCarEntity, UserEntity } from '../../utils/types';
@@ -146,18 +146,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`)} />}>
         {userCar?.car?.name}
       </PanelHeader>
-      <Placeholder
-        // icon={<Icon56MessageReadOutline />}
-        action={
-          <Group mode='plain' header={<Header mode="secondary">Техника</Header>}>
-            <SimpleCell>
-              <InfoRow header={"Кредиты"}>{userCar?.credits}</InfoRow>
-              <InfoRow header={"Состояние"}>{userCar?.state}</InfoRow>
-            </SimpleCell>
-          </Group>
-        }
-        stretched
-      >
+      <Placeholder stretched>
         <div
           className={`image-container ${clickCount > 0 ? 'active' : ''}`}
           style={{
@@ -179,33 +168,32 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
             className={`image ${clickCount > 0 ? 'bright' : ''}`}
           />
         </div>
-        <ContentCard
-          header={userCar?.car?.name}
+        <Group
+          header={<Header>Модель: "{userCar?.car?.name}" ({(userCar?.state || 0) <= 0 ? 'Потрачено' : ''})</Header>}
           key={userCar?.id}
-          subtitle={`Стоимость: ${userCar?.car?.price}`}
-          // caption={`Крайний удар по авто: ${damage}`}
-          text={
-            (
-              <>
-                <Button
-                  disabled={true}
-                  loading={isLoading}
-                  size="l"
-                  stretched
-                  style={{ marginTop: '8px' }}
-                >
-                  {(userCar?.state || 0) > 0 ? 'Авто не добито' : 'Уничтожено'}
-                </Button>
-                {(userCar?.state || 0) <= 0 && (
-                  <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCar?.id!)}>
-                    Обменять +{userCar?.credits || 0}
-                  </Button>
-                )}
-              </>
-            )
-          }
-          maxHeight={250}
-        />
+          mode='card'
+          separator='show'
+        >
+          <FormItem id="progresslabel" top={`Состоние ${(userCar?.state || 1)} из 1000`}>
+            <Progress aria-labelledby="progresslabel" value={(userCar?.state || 1) / 1000} />
+          </FormItem>
+          <SimpleCell indicator={damage} before={<Icon24HammerOutline fill="var(--vkui--color_icon_positive)"/>}>
+            Крайний удар
+          </SimpleCell>
+          <SimpleCell indicator={userCar?.car?.price} before={<Icon20DiamondOutline fill="var(--vkui--color_icon_positive)"/>}>
+            По чем покупалось
+          </SimpleCell>
+          <SimpleCell indicator={
+            (userCar?.credits || 0) + ' (' + Math.round((userCar?.credits || 1) / (userCar?.car?.price || 1) * 100) + '%)'
+          } before={<Icon20CupOutline fill="var(--vkui--color_icon_positive)"/>}>
+            Прибыль при обмене
+          </SimpleCell>
+          {(userCar?.state || 0) <= 0 && (
+            <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCar?.id!)}>
+              Обменять +{userCar?.credits || 0}
+            </Button>
+          )}
+        </Group>
       </Placeholder>
     </Panel >
   );
