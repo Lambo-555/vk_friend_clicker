@@ -169,7 +169,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           />
         </div>
         <Group
-          header={<Header>Модель: "{userCar?.car?.name}" ({(userCar?.state || 0) <= 0 ? 'Потрачено' : ''})</Header>}
+          header={<Header>Модель: "{userCar?.car?.name}" {(userCar?.state || 0) <= 0 ? '(Потрачено)' : ''}</Header>}
           key={userCar?.id}
           mode='card'
           separator='show'
