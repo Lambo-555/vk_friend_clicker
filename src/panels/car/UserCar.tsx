@@ -174,8 +174,8 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           mode='card'
           separator='show'
         >
-          <FormItem id="progresslabel" top={`Состоние ${(userCar?.state || 1)} из 1000`}>
-            <Progress aria-labelledby="progresslabel" value={(userCar?.state || 1) / 10} />
+          <FormItem id="progresslabel" top={`Состоние ${(userCar?.state || 0)} из 1000`}>
+            <Progress aria-labelledby="progresslabel" value={(userCar?.state || 0) / 10} />
           </FormItem>
           <SimpleCell indicator={damage} before={<Icon24HammerOutline fill="var(--vkui--color_icon_positive)"/>}>
             Крайний удар
