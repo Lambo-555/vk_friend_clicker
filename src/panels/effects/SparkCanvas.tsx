@@ -1,5 +1,3 @@
-import { getCarImageById } from "../images";
-
 interface ISpark {
   draw(): void;
   update(): void;

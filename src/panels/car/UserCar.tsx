@@ -1,9 +1,9 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ContentCard, FormItem, Group, Header, InfoRow, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Progress, SimpleCell, Snackbar } from '@vkontakte/vkui';
+import { Button, FormItem, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Progress, SimpleCell, Snackbar } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import bridge from '@vkontakte/vk-bridge';
 import './ImageSwitcher.css';
-import { Icon20CheckCircleFillGreen, Icon20CupOutline, Icon20DiamondOutline, Icon20StatisticsOutline, Icon24HammerOutline } from '@vkontakte/icons';
+import { Icon20CheckCircleFillGreen, Icon20CupOutline, Icon20DiamondOutline, Icon24HammerOutline } from '@vkontakte/icons';
 import { DEFAULT_VIEW_PANELS } from '../../routes';
 import { ApiService } from '../../utils/ApiService';
 import { UserCarEntity, UserEntity } from '../../utils/types';
