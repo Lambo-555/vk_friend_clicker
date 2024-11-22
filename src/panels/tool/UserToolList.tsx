@@ -1,13 +1,14 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ButtonGroup, ContentCard, Div, Flex, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
+import { Button, ButtonGroup, ContentCard, Counter, Div, Flex, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import bridge from '@vkontakte/vk-bridge';
-import { Icon28ShoppingCartOutline, Icon20DiamondOutline, Icon24HammerOutline, Icon24AddOutline } from '@vkontakte/icons';
+import { Icon28ShoppingCartOutline, Icon20DiamondOutline, Icon24HammerOutline, Icon24ArrowUp } from '@vkontakte/icons';
 import { DEFAULT_VIEW_PANELS } from '../../routes';
 import { ApiService } from '../../utils/ApiService';
 import { UserEntity, UserToolEntity } from '../../utils/types';
 import { getToolImageById } from '../images';
-import { openSnackbar } from '../utils';
+import { BuyCreditButton, openSnackbar } from '../utils';
+import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 
 // TODO добавить уровень
 
@@ -25,8 +26,8 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
     await routeNavigator.push(`/${DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST}`)
   };
 
-  const calculateImgIndex = (num: number): number => { // TODO change
-    return Math.min(Math.floor(num / 100) + 1, 10);
+  const calculateToolImgIndex = (state: number): number => {
+    return state > 500 ? 1 : 2;
   }
 
   const calcUpgradePrice = (tool: UserToolEntity): number => {
@@ -131,14 +132,7 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
           <>
             <PanelHeaderBack onClick={() => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.MAIN_SCREEN}`)} />
             <Div>
-              <Button
-                before={<Icon20DiamondOutline />}
-                mode="outline"
-                appearance="positive"
-                size="m"
-                style={{ minWidth: 75 }}
-              >{userData?.credits || 0}
-              </Button>
+              <BuyCreditButton credits={moneyShorter(userData?.credits || 0)} />
             </Div>
           </>
         }>
@@ -163,16 +157,16 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
 
       <Flex direction='row' margin='auto' gap='m' >
         {userToolList?.map((userToolData: UserToolEntity) => {
-          const imgIdx = calculateImgIndex(1000 - (userToolData?.state || 1));
+          const imgIdx = calculateToolImgIndex((userToolData?.state || 1));
           return (
             <ContentCard
               style={{ maxWidth: 350 }}
               maxHeight={250}
               header={
                 <ContentCard
-                  header={`Молот: ${userToolData?.tool?.name}. Номер: ${userToolData?.id}`}
+                  header={`Молот: ${userToolData?.tool?.name} (${userToolData?.id})`}
                   caption={`Состояние: ${userToolData?.state}`}
-                  text={`Кредиты: ${userToolData?.tool?.price}`}
+                  text={`Кредиты: ${moneyShorter(userToolData?.tool?.price || 0)}`}
                 />
               }
               key={userToolData.id}
@@ -196,20 +190,21 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
                       </Button>
                       <Button
                         disabled={calcUpgradePrice(userToolData) > (userData?.credits || 1)}
-                        before={<Icon24AddOutline />}
-                        appearance='neutral'
+                        before={<Icon24ArrowUp />}
+                        after={<Counter> -{moneyShorter(calcUpgradePrice(userToolData))} кред </Counter>}
+                        appearance='overlay'
                         loading={isLoading}
                         size="m"
                         stretched
                         style={{ marginTop: '8px' }}
                         onClick={() => handleUpgradeUserToolClick(userToolData?.id!)}
                       >
-                        UP! (+{userToolData.tool?.additionalDamagePerLevel} урона)(-{calcUpgradePrice(userToolData)} кредитов)
+                        +{userToolData.tool?.additionalDamagePerLevel} урона
                       </Button>
                     </>
                   )}
                   <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserToolClick(userToolData?.id!)}>
-                    Обменять (+{Math.round((userToolData?.tool?.price || 1) * (userToolData?.state || 1) / 1000)})
+                    Обменять (+{moneyShorter(Math.round((userToolData?.tool?.price || 1) * (userToolData?.state || 1) / 1000))})
                   </Button>
                 </ButtonGroup>
               }

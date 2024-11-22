@@ -29,3 +29,13 @@ export const transformVKBridgeAdaptivity = ({
       return {};
   }
 };
+
+export const moneyShorter = (moneyCount: number): string => {
+  if (moneyCount >= 1_000_000) {
+    return Math.round(moneyCount / 1_000_000 * 1000) / 1000 + 'M';
+  } else if (moneyCount >= 1_000) {
+    return Math.round(moneyCount / 1000 * 10) / 10 + 'K';
+  } else {
+    return '' + moneyCount;
+  }
+}

@@ -52,8 +52,8 @@ export class SparkCanvas {
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.context = this.canvas.getContext("2d")!;
-    this.width = this.canvas.width = 960 / 2.5; //window.innerWidth;
-    this.height = this.canvas.height = 540 / 2.5; //window.innerHeight;
+    this.width = this.canvas.width = 960 / 2; //window.innerWidth;
+    this.height = this.canvas.height = 540 / 2; //window.innerHeight;
   }
 
   public clearRect(): void {
@@ -91,7 +91,7 @@ export class Spark implements ISpark {
     this.canvas = canvas;
     this.posX = clickX;
     this.posY = clickY;
-    this.radius = Math.random() * 2 + 1; // случайный радиус от 1.5 до 3.5
+    this.radius = Math.random() * 4 + 1; // случайный радиус от 1.5 до 3.5
 
     // Рассчитываем расстояние от клика до центра канваса
     const centerX = canvas.width / 2; //canvas.width / 2;
@@ -101,18 +101,18 @@ export class Spark implements ISpark {
     );
 
     // Устанавливаем скорость в зависимости от расстояния от центра
-    const speedFactor = Math.min(distanceFromCenter / 100, 4); // Ограничиваем максимальную скорость
+    const speedFactor = Math.min(distanceFromCenter / 100, 8); // Ограничиваем максимальную скорость
     this.velocityX =
-      (clickX < centerX ? -1 : 1) * (Math.random() * 2 - 0.5 + speedFactor); // скорость влево или вправо
+      (clickX < centerX ? -1 : 1) * (Math.random() * 4 - 0.5 + speedFactor); // скорость влево или вправо
     this.velocityY =
-      (clickY < centerY ? -1 : 1) * (Math.random() * 2 - 0.5 + speedFactor); // скорость вверх или вниз
+      (clickY < centerY ? -1 : 1) * (Math.random() * 4 - 0.5 + speedFactor); // скорость вверх или вниз
   }
 
   public update(): void {
     this.gravity += 0.1;
     this.posX += this.velocityX;
     this.posY += this.velocityY + this.gravity;
-    this.opacity -= 0.02; // уменьшаем непрозрачность
+    this.opacity -= 0.03; // уменьшаем непрозрачность
   }
 
   public draw(): void {

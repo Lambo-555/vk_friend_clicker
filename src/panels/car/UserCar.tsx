@@ -9,6 +9,7 @@ import { ApiService } from '../../utils/ApiService';
 import { UserCarEntity, UserEntity } from '../../utils/types';
 import { SparkCanvas, SparkManager } from '../effects/SparkCanvas';
 import { getCarImageById } from '../images';
+import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 
 // TODO добавить отображение инструмента, добавить учет инструмента при тапах по автомобилю, показывать состояние инструмента
 
@@ -117,7 +118,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     // Logic
     setCurrentCarImgIndex(calculateImgIndex(1000 - (userCar?.state || 1)))
     setClickCount(prev => prev + 1);
-    if (Math.random() < 0.65) return;
     setClickCount(0);
     const result: UserCarEntity = await ApiService.damageUserCar(userData.id!, Number(userCarId || userCarIdStr));
     if (result) {
@@ -174,18 +174,18 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
           mode='card'
           separator='show'
         >
-          <FormItem id="progresslabel" top={`Состоние ${(userCar?.state || 0)} из 1000`}>
-            <Progress aria-labelledby="progresslabel" value={(userCar?.state || 0) / 10} />
+          <FormItem id="progresslabel" top={`Состояние ${(userCar?.state || 0)} из 1000`}>
+            <Progress appearance='positive' aria-labelledby="progresslabel" value={(userCar?.state || 0) / 10} />
           </FormItem>
-          <SimpleCell indicator={damage} before={<Icon24HammerOutline fill="var(--vkui--color_icon_positive)"/>}>
+          <SimpleCell indicator={damage} before={<Icon24HammerOutline fill="var(--vkui--color_icon_positive)" />}>
             Крайний удар
           </SimpleCell>
-          <SimpleCell indicator={userCar?.car?.price} before={<Icon20DiamondOutline fill="var(--vkui--color_icon_positive)"/>}>
+          <SimpleCell indicator={moneyShorter(userCar?.car?.price || 0)} before={<Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />}>
             По чем покупалось
           </SimpleCell>
           <SimpleCell indicator={
-            (userCar?.credits || 0) + ' (' + Math.round((userCar?.credits || 1) / (userCar?.car?.price || 1) * 100) + '%)'
-          } before={<Icon20CupOutline fill="var(--vkui--color_icon_positive)"/>}>
+            moneyShorter(userCar?.credits || 0) + ' (' + Math.round((userCar?.credits || 1) / (userCar?.car?.price || 1) * 100) + '%)'
+          } before={<Icon20CupOutline fill="var(--vkui--color_icon_positive)" />}>
             Прибыль при обмене
           </SimpleCell>
           {(userCar?.state || 0) <= 0 && (

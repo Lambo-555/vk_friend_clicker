@@ -7,6 +7,8 @@ import bridge, { EAdsFormats } from '@vkontakte/vk-bridge';
 import { UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
 import photo_1_1 from '../assets/1/1.png';
+import { moneyShorter } from '../utils/transformVKBridgeAdaptivity';
+import { BuyCreditButton } from './utils';
 
 export interface MainScreenProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -151,14 +153,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
     <Panel id={id}>
       <PanelHeader before={
         <Div>
-          <Button
-            before={<Icon20DiamondOutline />}
-            mode="outline"
-            appearance="positive"
-            size="m"
-            style={{ minWidth: 75 }}
-          >{userData?.credits || 0}
-          </Button>
+          <BuyCreditButton credits={moneyShorter(userData?.credits || 0)} />
         </Div>
       }>
         ТапаЛом

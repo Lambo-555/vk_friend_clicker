@@ -1,4 +1,5 @@
-import { Snackbar } from "@vkontakte/vkui";
+import { Icon20DiamondOutline } from "@vkontakte/icons";
+import { Button, Snackbar } from "@vkontakte/vkui";
 import { ReactNode } from "react";
 
 export const openSnackbar = (setPopout: React.Dispatch<React.SetStateAction<ReactNode>>, message?: string, icon?: ReactNode) => {
@@ -13,3 +14,17 @@ export const openSnackbar = (setPopout: React.Dispatch<React.SetStateAction<Reac
         </Snackbar>
     );
 };
+
+
+export const BuyCreditButton = ({ credits }: { credits: string }) => {
+    return (
+        <Button
+            before={<Icon20DiamondOutline />}
+            mode="outline"
+            appearance="positive"
+            size="m"
+        >
+            {credits}
+        </Button>
+    );
+}

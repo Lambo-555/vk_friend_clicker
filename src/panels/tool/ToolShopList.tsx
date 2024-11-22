@@ -6,7 +6,8 @@ import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/ico
 import { ApiService } from '../../utils/ApiService';
 import { UserEntity, ToolEntity, UserToolEntity } from '../../utils/types';
 import { getToolImageById } from '../images';
-import { openSnackbar } from '../utils';
+import { BuyCreditButton, openSnackbar } from '../utils';
+import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 
 export interface ToolShopListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -73,14 +74,7 @@ export const ToolShopList: FC<ToolShopListProps> = ({ id, setPopout }) => {
           <>
             <PanelHeaderBack onClick={() => routeNavigator.push('/')} />
             <Div>
-              <Button
-                before={<Icon20DiamondOutline />}
-                mode="outline"
-                appearance="positive"
-                size="m"
-                style={{ minWidth: 75 }}
-              >{userData?.credits || 0}
-              </Button>
+              <BuyCreditButton credits={moneyShorter(userData?.credits || 0)} />
             </Div>
           </>
         }>
@@ -96,14 +90,14 @@ export const ToolShopList: FC<ToolShopListProps> = ({ id, setPopout }) => {
               style={{ maxWidth: 350 }}
               header={`"${tool?.name || 'error'}"`}
               key={index}
-              caption={'Наноси больше урона!'}
+              caption={'Наноси больше урона, дедка!'}
               subtitle={`Молот`}
               src={getToolImageById(tool?.id || 1, 1)}
 
               text={
                 (userData?.credits || 0) > (tool?.price || 500) ? (
-                  <Button loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleBuyToolClick(tool.id!)}>
-                    Купить за {tool?.price || 'error'}
+                  <Button appearance='positive' before={<Icon20DiamondOutline/>} loading={isLoading} size="l" stretched style={{ marginTop: '8px' }} onClick={() => handleBuyToolClick(tool.id!)}>
+                    Купить за {moneyShorter(tool?.price || 0) || 'error'}
                   </Button>
                 ) : (
                   <Button disabled size="l" appearance="negative" stretched style={{ marginTop: '8px' }}>

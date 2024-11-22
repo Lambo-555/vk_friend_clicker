@@ -42,6 +42,17 @@ import photo_4_8 from '../assets/4/8.png';
 import photo_4_9 from '../assets/4/9.png';
 import photo_4_10 from '../assets/4/10.png';
 
+import photo_5_1 from '../assets/5/1.png';
+import photo_5_2 from '../assets/5/2.png';
+import photo_5_3 from '../assets/5/3.png';
+import photo_5_4 from '../assets/5/4.png';
+import photo_5_5 from '../assets/5/5.png';
+import photo_5_6 from '../assets/5/6.png';
+import photo_5_7 from '../assets/5/7.png';
+import photo_5_8 from '../assets/5/8.png';
+import photo_5_9 from '../assets/5/9.png';
+import photo_5_10 from '../assets/5/10.png';
+
 import hummer_1_1 from '../assets/hummers/1/1.png';
 import hummer_1_2 from '../assets/hummers/1/2.png';
 import hummer_2_1 from '../assets/hummers/2/1.png';
@@ -96,6 +107,18 @@ export const getCarImageById = (carId: number, imgId: number): string => {
             8: photo_4_8,
             9: photo_4_9,
             10: photo_4_10,
+        },
+        5: {
+            1: photo_5_1,
+            2: photo_5_2,
+            3: photo_5_3,
+            4: photo_5_4,
+            5: photo_5_5,
+            6: photo_5_6,
+            7: photo_5_7,
+            8: photo_5_8,
+            9: photo_5_9,
+            10: photo_5_10,
         }
     }
     return images?.[carId]?.[imgId];

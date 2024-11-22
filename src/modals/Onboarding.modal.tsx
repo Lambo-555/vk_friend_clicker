@@ -1,16 +1,16 @@
 // import { ModalRoot, ModalPage, ModalCard, SplitLayout } from "@vkontakte/vkui";
 
-import { Icon56DeleteOutlineIos, Icon56GavelOutline, Icon56StopwatchOutline, Icon56Users3Outline, Icon56WrenchOutline } from "@vkontakte/icons";
+import { Icon24CancelCircleFillRed, Icon24ChainOutline, Icon24CheckCircleFillGreen, Icon24PawOutline, Icon56DeleteOutlineIos, Icon56GavelOutline, Icon56StopwatchOutline, Icon56Users3Outline, Icon56WrenchOutline } from "@vkontakte/icons";
 import { Spacing, ButtonGroup, Button, ModalCard } from "@vkontakte/vkui";
 import React from "react";
 import { DEFAULT_MODALS } from "../routes";
 
-export const WelcomeOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
+export const WelcomeOnboarding = ({ id, setCurrentModal }: { id: string, setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
     return (
         <ModalCard
-            id={id} 
+            id={id}
             onClose={() => setCurrentModal(null)}
-            
+
             icon={<Icon56GavelOutline />}
             header="О чем игра?"
             subheader="Тут надо крушить и ломать авто на запчасти!"
@@ -18,7 +18,7 @@ export const WelcomeOnboarding = ({ id, setCurrentModal }: { id: string,  setCur
                 <React.Fragment>
                     <Spacing size={16} />
                     <ButtonGroup mode="vertical" gap="s" stretched>
-                        <Button size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.DAMAGE_2)}>
+                        <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.DAMAGE_2)}>
                             То что надо
                         </Button>
                         <Button onClick={setCurrentModal} size="l" mode="secondary" stretched>
@@ -31,12 +31,12 @@ export const WelcomeOnboarding = ({ id, setCurrentModal }: { id: string,  setCur
     )
 }
 
-export const DamageOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
+export const DamageOnboarding = ({ id, setCurrentModal }: { id: string, setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
     return (
-        <ModalCard 
-            id={id} 
+        <ModalCard
+            id={id}
             onClose={() => setCurrentModal(null)}
-            
+
             icon={<Icon56WrenchOutline />}
             header="Как провигаться?"
             subheader="Выбирай авто из своего списка машин и активно тапай"
@@ -44,10 +44,10 @@ export const DamageOnboarding = ({ id, setCurrentModal }: { id: string,  setCurr
                 <React.Fragment>
                     <Spacing size={16} />
                     <ButtonGroup mode="vertical" gap="s" stretched>
-                        <Button size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.BUY_3)}>
+                        <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.BUY_3)}>
                             Неплохо
                         </Button>
-                        <Button onClick={setCurrentModal} size="l" mode="secondary" stretched>
+                        <Button before={<Icon24CancelCircleFillRed />} onClick={setCurrentModal} size="l" mode="secondary" stretched>
                             Уйти
                         </Button>
                     </ButtonGroup>
@@ -57,12 +57,12 @@ export const DamageOnboarding = ({ id, setCurrentModal }: { id: string,  setCurr
     )
 }
 
-export const BuyOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
+export const BuyOnboarding = ({ id, setCurrentModal }: { id: string, setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
     return (
-        <ModalCard 
-            id={id} 
+        <ModalCard
+            id={id}
             onClose={() => setCurrentModal(null)}
-            
+
             icon={<Icon56DeleteOutlineIos />}
             header="А если я все сломаю?"
             subheader="В этом суть! Покупай хлам за кредиты и ломай его для большей прибыли"
@@ -70,10 +70,10 @@ export const BuyOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrent
                 <React.Fragment>
                     <Spacing size={16} />
                     <ButtonGroup mode="vertical" gap="s" stretched>
-                        <Button size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.INVITE_4)}>
+                        <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.INVITE_4)}>
                             Круть
                         </Button>
-                        <Button onClick={setCurrentModal} size="l" mode="secondary" stretched>
+                        <Button before={<Icon24CancelCircleFillRed />} onClick={setCurrentModal} size="l" mode="secondary" stretched>
                             Выйти
                         </Button>
                     </ButtonGroup>
@@ -83,12 +83,12 @@ export const BuyOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrent
     )
 }
 
-export const InviteOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
+export const InviteOnboarding = ({ id, setCurrentModal }: { id: string, setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
     return (
-        <ModalCard 
-            id={id} 
+        <ModalCard
+            id={id}
             onClose={() => setCurrentModal(null)}
-            
+
             icon={<Icon56Users3Outline />}
             header="А вдруг мои лапки устанут?"
             subheader="Приглашай друзей в игру и получай приятный бонус"
@@ -96,10 +96,10 @@ export const InviteOnboarding = ({ id, setCurrentModal }: { id: string,  setCurr
                 <React.Fragment>
                     <Spacing size={16} />
                     <ButtonGroup mode="vertical" gap="s" stretched>
-                        <Button size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.ADS_5)}>
-                            Друзья...
+                        <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.ADS_5)}>
+                            Бонусы? Ок, далее...
                         </Button>
-                        <Button onClick={setCurrentModal} size="l" mode="secondary" stretched>
+                        <Button before={<Icon24CancelCircleFillRed />} onClick={setCurrentModal} size="l" mode="secondary" stretched>
                             Позже
                         </Button>
                     </ButtonGroup>
@@ -109,12 +109,12 @@ export const InviteOnboarding = ({ id, setCurrentModal }: { id: string,  setCurr
     )
 }
 
-export const AdsOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
+export const AdsOnboarding = ({ id, setCurrentModal }: { id: string, setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
     return (
         <ModalCard
             id={id}
             onClose={() => setCurrentModal(null)}
-            
+
             icon={<Icon56StopwatchOutline />}
             header="Что делать если я лев-тигр нет друзей?"
             subheader="Смотри рекламу, получай бонус и ищи друзей в нашем сообществе!"
@@ -122,14 +122,11 @@ export const AdsOnboarding = ({ id, setCurrentModal }: { id: string,  setCurrent
                 <React.Fragment>
                     <Spacing size={16} />
                     <ButtonGroup mode="vertical" gap="s" stretched>
-                        <Button size="l" mode="primary" stretched onClick={() => setCurrentModal(null)}>
-                            Ррррр! (по лев-тигриному)
+                        <Button before={<Icon24ChainOutline />} mode='link' href='https://vk.com/tapoLom' size="l" stretched>
+                            Прыгнуть в сообщество!
                         </Button>
-                        <Button disabled size="l" mode="primary" stretched>
-                            В сообщество
-                        </Button>
-                        <Button onClick={() => setCurrentModal(null)} size="l" mode="secondary" stretched>
-                            Я... Я не лев-тигр...
+                        <Button before={<Icon24PawOutline />} onClick={() => setCurrentModal(null)} size="l" mode="primary" stretched>
+                            Нажать лапкой и уйти
                         </Button>
                     </ButtonGroup>
                 </React.Fragment>
