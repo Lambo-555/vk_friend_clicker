@@ -21,7 +21,7 @@ export const WelcomeOnboarding = ({ id, setCurrentModal }: { id: string, setCurr
                         <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.DAMAGE_2)}>
                             То что надо
                         </Button>
-                        <Button onClick={setCurrentModal} size="l" mode="secondary" stretched>
+                        <Button before={<Icon24CancelCircleFillRed />} onClick={setCurrentModal} size="l" mode="secondary" stretched>
                             Не, ухожу
                         </Button>
                     </ButtonGroup>

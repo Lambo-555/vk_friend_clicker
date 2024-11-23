@@ -28,6 +28,7 @@ export const DEFAULT_MODALS = {
   BUY_3: 'BUY_3',
   INVITE_4: 'INVITE_4',
   ADS_5: 'ADS_5',
+  MARKET_MODAL: 'MARKET_MODAL',
 } as const;
 
 export const routes = RoutesConfig.create([
