@@ -56,7 +56,7 @@ export const App = () => {
       <InviteOnboarding id={DEFAULT_MODALS.INVITE_4} setCurrentModal={setCurrentModal} />
       <AdsOnboarding id={DEFAULT_MODALS.ADS_5} setCurrentModal={setCurrentModal} />
       <AdsOnboarding id={DEFAULT_MODALS.ADS_5} setCurrentModal={setCurrentModal} />
-      <PaymentModal id={DEFAULT_MODALS.PAYMENT_MODAL} setCurrentModal={setCurrentModal} />
+      <PaymentModal id={DEFAULT_MODALS.PAYMENT_MODAL} setCurrentModal={setCurrentModal} setPopout={setPopout} />
     </ModalRoot>
   );
 
