@@ -181,16 +181,16 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
             Крайний удар
           </SimpleCell>
           <SimpleCell indicator={moneyShorter(userCar?.car?.price || 0)} before={<Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />}>
-            По чем покупалось
+            Цена покупки
           </SimpleCell>
           <SimpleCell indicator={
             moneyShorter(userCar?.credits || 0) + ' (' + Math.round((userCar?.credits || 1) / (userCar?.car?.price || 1) * 100) + '%)'
           } before={<Icon20CupOutline fill="var(--vkui--color_icon_positive)" />}>
-            Прибыль при обмене
+            Прибыль
           </SimpleCell>
           {(userCar?.state || 0) <= 0 && (
             <Button before={<Icon20DiamondOutline />} appearance='negative' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleExchangeUserCarCreditsClick(userCar?.id!)}>
-              Обменять +{userCar?.credits || 0}
+              Обменять +{moneyShorter(userCar?.credits || 0)}
             </Button>
           )}
         </Group>

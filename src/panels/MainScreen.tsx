@@ -1,9 +1,9 @@
 import { FC, ReactNode, useEffect, useState, } from 'react';
 import { Button, ButtonGroup, Div, Link, NavIdProps, Panel, PanelHeader, Placeholder, Separator, Snackbar } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28CarOutline, Icon28StarCircleFillBlue, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline, Icon28Cards2Outline } from '@vkontakte/icons';
+import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28PaymentCardOutline, Icon28StarCircleFillBlue, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline, Icon28Cards2Outline, Icon28CarOutline } from '@vkontakte/icons';
 import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
-import bridge, { EAdsFormats } from '@vkontakte/vk-bridge';
+import vkBridge, { EAdsFormats } from '@vkontakte/vk-bridge';
 import { UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
 import photo_1_1 from '../assets/1/1.png';
@@ -35,13 +35,13 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
   useEffect(() => {
     const autoRegistration = async () => {
       console.log('autoregistration start');
-      const { vk_user_id } = await bridge.send('VKWebAppGetLaunchParams');
+      const { vk_user_id } = await vkBridge.send('VKWebAppGetLaunchParams');
 
       if (vk_user_id) {
         const dbUserData: UserEntity = await ApiService.getVkUserByVkId(vk_user_id);
 
         if (!dbUserData) {
-          const vkUserData = await bridge.send('VKWebAppGetUserInfo', { user_id: Number(vk_user_id) });
+          const vkUserData = await vkBridge.send('VKWebAppGetUserInfo', { user_id: Number(vk_user_id) });
 
           if (vkUserData) {
             const user: UserEntity = await ApiService.registerUser({
@@ -63,7 +63,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
 
   useEffect(() => {
     const getUserData = async () => {
-      const { vk_user_id } = await bridge.send('VKWebAppGetLaunchParams');
+      const { vk_user_id } = await vkBridge.send('VKWebAppGetLaunchParams');
       if (vk_user_id) {
         const user: UserEntity = await ApiService.getVkUserByVkId(vk_user_id);
         if (user) {
@@ -74,6 +74,17 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
     getUserData();
   }, [])
 
+  const handlePayment = async () => {
+    setCurrentModal(DEFAULT_MODALS.PAYMENT_MODAL);
+    return;
+    // try {
+    //   const result = await vkBridge.send("VKWebAppShowOrderBox", {type:"item", item:"1"});
+    //   console.log('Покупка состоялась.', result)
+    // } catch (error) {
+    //   console.log('Ошибка!', error)
+    // }
+  };
+
   const handleGoToCarShop = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.CAR_SHOP_LIST}`);
   const handleGoToUserCarList = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`);
   const handleGoToToolShop = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST}`);
@@ -81,7 +92,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
   const handleShowOnboarding = () => setCurrentModal(DEFAULT_MODALS.WELCOME_1);
   const handleShowAds = async () => {
     try {
-      const adsShow = await bridge.send('VKWebAppShowNativeAds', {
+      const adsShow = await vkBridge.send('VKWebAppShowNativeAds', {
         ad_format: EAdsFormats.REWARD,
       })
       if (adsShow?.result && userData?.id) {
@@ -106,7 +117,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
 
   const handleToFavorites = async () => {
     try {
-      const toFavorites = await bridge.send('VKWebAppAddToFavorites', { request_id: 'from_main_menu' });
+      const toFavorites = await vkBridge.send('VKWebAppAddToFavorites', { request_id: 'from_main_menu' });
       if (toFavorites?.result && userData?.id) {
         const isBonus = await ApiService.addInviteBonus(userData.id);
         if (isBonus) {
@@ -128,7 +139,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
   }
   const handleInviteFriends = async (): Promise<void> => {
     try {
-      const userListData = await bridge.send('VKWebAppShowInviteBox', { request_id: 'from_main_menu' });
+      const userListData = await vkBridge.send('VKWebAppShowInviteBox', { request_id: 'from_main_menu' });
       if (userListData && userData?.id) {
         const isBonus = await ApiService.addInviteBonus(userData.id);
         if (isBonus) {
@@ -181,6 +192,10 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
                 Гараж
               </Button>
             </ButtonGroup>
+
+            <Button before={<Icon28PaymentCardOutline />} onClick={handlePayment} size="l" appearance="accent" stretched>
+              Payment
+            </Button>
 
             <ButtonGroup
               mode="horizontal"
