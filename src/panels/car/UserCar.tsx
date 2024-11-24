@@ -15,6 +15,7 @@ import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
+  setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
 }
 
 export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {

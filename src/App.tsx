@@ -24,10 +24,10 @@ export const App = () => {
     const autoRegistration = async () => {
       console.log('autoregistration start');
       const { vk_user_id } = await bridge.send('VKWebAppGetLaunchParams');
-      
+
       if (vk_user_id) {
         const dbUserData: UserEntity = await ApiService.getVkUserByVkId(vk_user_id);
-        
+
         if (!dbUserData) {
           const vkUserData = await bridge.send('VKWebAppGetUserInfo', { user_id: Number(vk_user_id) });
 
@@ -56,7 +56,7 @@ export const App = () => {
       <InviteOnboarding id={DEFAULT_MODALS.INVITE_4} setCurrentModal={setCurrentModal} />
       <AdsOnboarding id={DEFAULT_MODALS.ADS_5} setCurrentModal={setCurrentModal} />
       <AdsOnboarding id={DEFAULT_MODALS.ADS_5} setCurrentModal={setCurrentModal} />
-      <PaymentModal id={DEFAULT_MODALS.PAYMENT_MODAL} setCurrentModal={setCurrentModal} setPopout={setPopout}/>
+      <PaymentModal id={DEFAULT_MODALS.PAYMENT_MODAL} setCurrentModal={setCurrentModal} />
     </ModalRoot>
   );
 
@@ -65,11 +65,11 @@ export const App = () => {
       <SplitCol>
         <View activePanel={activePanel}>
           <MainScreen id={DEFAULT_VIEW_PANELS.MAIN_SCREEN} setPopout={setPopout} setCurrentModal={setCurrentModal} />
-          <CarShopList id={DEFAULT_VIEW_PANELS.CAR_SHOP_LIST} setPopout={setPopout} />
-          <UserCarList id={DEFAULT_VIEW_PANELS.USER_CAR_LIST} setPopout={setPopout} />
-          <UserCar id={DEFAULT_VIEW_PANELS.USER_CAR} setPopout={setPopout} />
-          <ToolShopList id={DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST} setPopout={setPopout} />
-          <UserToolList id={DEFAULT_VIEW_PANELS.USER_TOOL_LIST} setPopout={setPopout} />
+          <CarShopList id={DEFAULT_VIEW_PANELS.CAR_SHOP_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
+          <UserCarList id={DEFAULT_VIEW_PANELS.USER_CAR_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
+          <UserCar id={DEFAULT_VIEW_PANELS.USER_CAR} setPopout={setPopout} setCurrentModal={setCurrentModal} />
+          <ToolShopList id={DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
+          <UserToolList id={DEFAULT_VIEW_PANELS.USER_TOOL_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
         </View>
       </SplitCol>
     </SplitLayout>

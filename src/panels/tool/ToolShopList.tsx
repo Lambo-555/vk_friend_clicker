@@ -11,9 +11,10 @@ import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 
 export interface ToolShopListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
+  setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
 }
 
-export const ToolShopList: FC<ToolShopListProps> = ({ id, setPopout }) => {
+export const ToolShopList: FC<ToolShopListProps> = ({ id, setPopout, setCurrentModal }) => {
   const [toolList, setToolList] = useState<ToolEntity[]>([]);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -74,7 +75,7 @@ export const ToolShopList: FC<ToolShopListProps> = ({ id, setPopout }) => {
           <>
             <PanelHeaderBack onClick={() => routeNavigator.push('/')} />
             <Div>
-              <BuyCreditButton credits={moneyShorter(userData?.credits || 0)} />
+              <BuyCreditButton setCurrentModal={setCurrentModal} credits={moneyShorter(userData?.credits || 0)} />
             </Div>
           </>
         }>

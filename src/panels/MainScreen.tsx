@@ -74,17 +74,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
     getUserData();
   }, [])
 
-  const handlePayment = async () => {
-    setCurrentModal(DEFAULT_MODALS.PAYMENT_MODAL);
-    return;
-    // try {
-    //   const result = await vkBridge.send("VKWebAppShowOrderBox", {type:"item", item:"1"});
-    //   console.log('Покупка состоялась.', result)
-    // } catch (error) {
-    //   console.log('Ошибка!', error)
-    // }
-  };
-
+  const handlePayment = () => setCurrentModal(DEFAULT_MODALS.PAYMENT_MODAL);
   const handleGoToCarShop = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.CAR_SHOP_LIST}`);
   const handleGoToUserCarList = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`);
   const handleGoToToolShop = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST}`);
@@ -164,7 +154,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
     <Panel id={id}>
       <PanelHeader before={
         <Div>
-          <BuyCreditButton credits={moneyShorter(userData?.credits || 0)} />
+          <BuyCreditButton setCurrentModal={setCurrentModal} credits={moneyShorter(userData?.credits || 0)} />
         </Div>
       }>
         ТапаЛом
@@ -193,10 +183,6 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
               </Button>
             </ButtonGroup>
 
-            <Button before={<Icon28PaymentCardOutline />} onClick={handlePayment} size="l" appearance="accent" stretched>
-              Payment
-            </Button>
-
             <ButtonGroup
               mode="horizontal"
               gap="m"
@@ -222,6 +208,9 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
               </Button>
               <Button before={<Icon28StarCircleFillBlue />} onClick={handleToFavorites} size="l" appearance="neutral" stretched>
                 В избранное
+              </Button>
+              <Button before={<Icon28PaymentCardOutline />} onClick={handlePayment} size="l" appearance="neutral" stretched>
+                Товары за голоса
               </Button>
             </ButtonGroup>
 

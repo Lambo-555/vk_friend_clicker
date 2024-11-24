@@ -10,13 +10,12 @@ import { getToolImageById } from '../images';
 import { BuyCreditButton, openSnackbar } from '../utils';
 import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 
-// TODO добавить уровень
-
 export interface UserToolListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
+  setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
 }
 
-export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
+export const UserToolList: FC<UserToolListProps> = ({ id, setPopout, setCurrentModal }) => {
   const [userToolList, setUserToolList] = useState<UserToolEntity[]>([]);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -132,7 +131,7 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout }) => {
           <>
             <PanelHeaderBack onClick={() => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.MAIN_SCREEN}`)} />
             <Div>
-              <BuyCreditButton credits={moneyShorter(userData?.credits || 0)} />
+              <BuyCreditButton setCurrentModal={setCurrentModal} credits={moneyShorter(userData?.credits || 0)} />
             </Div>
           </>
         }>

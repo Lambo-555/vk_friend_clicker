@@ -12,9 +12,10 @@ import { BuyCreditButton } from '../utils';
 
 export interface UserCarListProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
+  setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
 }
 
-export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
+export const UserCarList: FC<UserCarListProps> = ({ id, setPopout, setCurrentModal }) => {
   const [userCarList, setUserCarList] = useState<UserCarEntity[]>([]);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -102,7 +103,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout }) => {
           <>
             <PanelHeaderBack onClick={() => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.MAIN_SCREEN}`)} />
             <Div>
-              <BuyCreditButton credits={moneyShorter(userData?.credits || 0)} />
+              <BuyCreditButton setCurrentModal={setCurrentModal} credits={moneyShorter(userData?.credits || 0)} />
             </Div>
           </>
         }>
