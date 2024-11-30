@@ -14,6 +14,7 @@ import { ToolShopList } from './panels/tool/ToolShopList';
 import { UserToolList } from './panels/tool/UserToolList';
 import { CarShopList } from './panels/car/CarShopList';
 import { PaymentModal } from './modals/Payment.modal';
+import { BuyCarModal } from './modals/BuyCar.modal';
 
 export const App = () => {
   const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME } = useActiveVkuiLocation();
@@ -57,6 +58,7 @@ export const App = () => {
       <AdsOnboarding id={DEFAULT_MODALS.ADS_5} setCurrentModal={setCurrentModal} />
       <AdsOnboarding id={DEFAULT_MODALS.ADS_5} setCurrentModal={setCurrentModal} />
       <PaymentModal id={DEFAULT_MODALS.PAYMENT_MODAL} setCurrentModal={setCurrentModal} setPopout={setPopout} />
+      <BuyCarModal id={DEFAULT_MODALS.BUY_CAR_MODAL} setCurrentModal={setCurrentModal} />
     </ModalRoot>
   );
 
@@ -65,7 +67,7 @@ export const App = () => {
       <SplitCol>
         <View activePanel={activePanel}>
           <MainScreen id={DEFAULT_VIEW_PANELS.MAIN_SCREEN} setPopout={setPopout} setCurrentModal={setCurrentModal} />
-          <CarShopList id={DEFAULT_VIEW_PANELS.CAR_SHOP_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
+          <CarShopList id={DEFAULT_VIEW_PANELS.CAR_SHOP_LIST} setCurrentModal={setCurrentModal} />
           <UserCarList id={DEFAULT_VIEW_PANELS.USER_CAR_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
           <UserCar id={DEFAULT_VIEW_PANELS.USER_CAR} setPopout={setPopout} setCurrentModal={setCurrentModal} />
           <ToolShopList id={DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />

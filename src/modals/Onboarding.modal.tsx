@@ -21,7 +21,7 @@ export const WelcomeOnboarding = ({ id, setCurrentModal }: { id: string, setCurr
                         <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.DAMAGE_2)}>
                             То что надо
                         </Button>
-                        <Button before={<Icon24CancelCircleFillRed />} onClick={setCurrentModal} size="l" mode="secondary" stretched>
+                        <Button before={<Icon24CancelCircleFillRed />} onClick={() => setCurrentModal(null)} size="l" mode="secondary" stretched>
                             Не, ухожу
                         </Button>
                     </ButtonGroup>
@@ -47,7 +47,7 @@ export const DamageOnboarding = ({ id, setCurrentModal }: { id: string, setCurre
                         <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.BUY_3)}>
                             Неплохо
                         </Button>
-                        <Button before={<Icon24CancelCircleFillRed />} onClick={setCurrentModal} size="l" mode="secondary" stretched>
+                        <Button before={<Icon24CancelCircleFillRed />} onClick={() => setCurrentModal(null)} size="l" mode="secondary" stretched>
                             Уйти
                         </Button>
                     </ButtonGroup>
@@ -73,7 +73,7 @@ export const BuyOnboarding = ({ id, setCurrentModal }: { id: string, setCurrentM
                         <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.INVITE_4)}>
                             Круть
                         </Button>
-                        <Button before={<Icon24CancelCircleFillRed />} onClick={setCurrentModal} size="l" mode="secondary" stretched>
+                        <Button before={<Icon24CancelCircleFillRed />} onClick={() => setCurrentModal(null)} size="l" mode="secondary" stretched>
                             Выйти
                         </Button>
                     </ButtonGroup>
@@ -99,7 +99,7 @@ export const InviteOnboarding = ({ id, setCurrentModal }: { id: string, setCurre
                         <Button before={<Icon24CheckCircleFillGreen />} size="l" mode="primary" stretched onClick={() => setCurrentModal(DEFAULT_MODALS.ADS_5)}>
                             Бонусы? Ок, далее...
                         </Button>
-                        <Button before={<Icon24CancelCircleFillRed />} onClick={setCurrentModal} size="l" mode="secondary" stretched>
+                        <Button before={<Icon24CancelCircleFillRed />} onClick={() => setCurrentModal(null)} size="l" mode="secondary" stretched>
                             Позже
                         </Button>
                     </ButtonGroup>

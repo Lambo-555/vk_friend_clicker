@@ -13,7 +13,7 @@ export class DamageText {
   private opacity: number = 1;
 
   constructor(canvas: SparkCanvas, clickX: number, clickY: number, damageValue: number) {
-    const randomText = ['OMG', 'Ого', 'Бро', 'Круть', 'DDos', 'Сила'];
+    const randomText = ['OMG', 'Ого', 'Бро', 'Круть', 'DDos', 'Сила', 'Жесть', 'Уффф', 'Бабах', 'Анриал', 'Хорош', 'Тяп лапкой'];
     const addText = randomText[Math.floor(randomText.length * Math.random())];
     this.canvas = canvas;
     this.posX = clickX;
@@ -30,8 +30,8 @@ export class DamageText {
   public draw(): void {
     if (this.opacity > 0) {
       if (this.canvas) {
-        this.canvas.context.fillStyle = `rgba(225, 205, 0, ${this.opacity})`;
-        this.canvas.context.font = "bold 24px Consolas Roboto Helvetica";
+        this.canvas.context.fillStyle = `rgba(225, 240, 255, ${this.opacity})`;
+        this.canvas.context.font = "bold 32px Consolas Roboto Helvetica";
         this.canvas.context.fillText(this.text, this.posX, this.posY);
       }
     }

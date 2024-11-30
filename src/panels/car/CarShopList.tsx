@@ -1,37 +1,25 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Button, Card, Div, Flex, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Snackbar, Spinner } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import bridge from '@vkontakte/vk-bridge';
-import { Icon20CheckCircleFillGreen, Icon20DiamondOutline } from '@vkontakte/icons';
+import { Icon20DiamondOutline } from '@vkontakte/icons';
 import { ApiService } from '../../utils/ApiService';
 import { CarEntity, UserEntity, UserCarEntity } from '../../utils/types';
 import { getCarImageById } from '../images';
 import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 import { BuyCreditButton } from '../utils';
+import { DEFAULT_MODALS } from '../../routes';
 
 export interface CarShopListProps extends NavIdProps {
-  setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
   setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
 }
 
-export const CarShopList: FC<CarShopListProps> = ({ id, setPopout, setCurrentModal }) => {
+export const CarShopList: FC<CarShopListProps> = ({ id, setCurrentModal }) => {
   const [carList, setCarList] = useState<CarEntity[]>([]);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const routeNavigator = useRouteNavigator();
 
-  const openSnackbar = (message?: string, icon?: ReactNode) => {
-    setPopout(
-      <Snackbar
-        onClick={() => setPopout(null)}
-        duration={2000}
-        onClose={() => setPopout(null)}
-        before={icon ? icon : null}
-      >
-        {message || 'Что-то пошло не так'}
-      </Snackbar>
-    );
-  };
+  const routeNavigator = useRouteNavigator();
 
   const isCarAvailableForUser = (userData: UserEntity, car: CarEntity) => {
     return (userData?.credits || 0) > (car?.price || 500);
@@ -71,15 +59,13 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout, setCurrentMod
       setIsLoading(false);
       return;
     }
+    
 
     const result: UserCarEntity = await ApiService.buyUserCar(userData.id, carId);
     if (result) {
-      openSnackbar(
-        `Модель ${result.car?.name || 'basecar'} куплена за ${moneyShorter(result.car?.price || 0)}`,
-        <Icon20CheckCircleFillGreen />
-      );
-      if (result?.user) setUserData(result.user);
       setIsLoading(false);
+      setCurrentModal(DEFAULT_MODALS.BUY_CAR_MODAL);
+      if (result?.user) setUserData(result.user);
     }
   }
 

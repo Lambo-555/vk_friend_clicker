@@ -30,6 +30,7 @@ export const DEFAULT_MODALS = {
   ADS_5: 'ADS_5',
   MARKET_MODAL: 'MARKET_MODAL',
   PAYMENT_MODAL: 'PAYMENT_MODAL',
+  BUY_CAR_MODAL: 'BUY_CAR_MODAL',
 } as const;
 
 export const routes = RoutesConfig.create([
