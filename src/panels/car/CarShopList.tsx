@@ -33,6 +33,10 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout, setCurrentMod
     );
   };
 
+  const isCarAvailableForUser = (userData: UserEntity, car: CarEntity) => {
+    return (userData?.credits || 0) > (car?.price || 500);
+  }
+
   useEffect(() => {
     setIsLoading(true)
     const getUserData = async () => {
@@ -111,20 +115,24 @@ export const CarShopList: FC<CarShopListProps> = ({ id, setPopout, setCurrentMod
               }}
               mode="outline-tint">
               <img
-                style={{ filter: 'brightness(0) blur(15px) opacity(0.5)', width: '75%', margin: 'auto', position: 'absolute', top: -50 }}
+                style={{ filter: 'brightness(0) blur(10px) opacity(0.5)', width: '75%', margin: 'auto', position: 'absolute', top: -50 }}
                 src={getCarImageById(car?.id || 1, 1)}
                 alt="car"
               />
-              <img
-                style={{ width: '75%', margin: 'auto', position: 'absolute', top: -50 }}
-                src={getCarImageById(car?.id || 1, 1)}
-                alt="car"
-              />
+              {isCarAvailableForUser(userData!, car) && (
+                <img
+                  style={{ width: '75%', margin: 'auto', position: 'absolute', top: -50 }}
+                  src={getCarImageById(car?.id || 1, 1)}
+                  alt="car"
+                />
+              )}
               <div style={{ height: 96 }} />
-              <Group mode='plain' style={{ width: '95%' }} header={<Header>Модель: {car?.name || 'error'}</Header>}>
+              <Group mode='plain' style={{ width: '95%' }} header={
+                <Header>Модель: {isCarAvailableForUser(userData!, car) ? car?.name : 'неизвестно'}</Header>
+              }>
                 {
-                  (userData?.credits || 0) > (car?.price || 500) ? (
-                    <Button before={<Icon20DiamondOutline/>} appearance='positive' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleBuyUserBuyClick(car.id!)}>
+                  isCarAvailableForUser(userData!, car) ? (
+                    <Button before={<Icon20DiamondOutline />} appearance='positive' loading={isLoading} size="m" stretched style={{ marginTop: '8px' }} onClick={() => handleBuyUserBuyClick(car.id!)}>
                       Купить за {moneyShorter(car?.price || 0) || 'error'}
                     </Button>
                   ) : (
