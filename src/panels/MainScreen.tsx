@@ -6,9 +6,11 @@ import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
 import vkBridge, { EAdsFormats } from '@vkontakte/vk-bridge';
 import { UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
-import photo_1_1 from '../assets/1/1.png';
+import handHummerImg from '../assets/handhummer.png';
+import carImage from '../assets/1/1.png';
 import { moneyShorter } from '../utils/transformVKBridgeAdaptivity';
 import { BuyCreditButton } from './utils';
+import './focus.css';
 
 export interface MainScreenProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -152,6 +154,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
 
   return (
     <Panel id={id}>
+
       <PanelHeader before={
         <Div>
           <BuyCreditButton setCurrentModal={setCurrentModal} credits={moneyShorter(userData?.credits || 0)} />
@@ -159,8 +162,35 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       }>
         ТапаЛом
       </PanelHeader>
+
       <Placeholder
-        header={<img alt='разбитое авто' style={{ maxWidth: 300 }} src={photo_1_1} />}
+        header={
+          <div style={{
+            position: 'relative',
+            width: 300,
+            height: 150,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
+            <img
+              className='focuser-one'
+              style={{
+                maxWidth: 250,
+                bottom: 0,
+                position: 'absolute',
+              }}
+              src={carImage}
+              alt="car"
+            />
+            <img
+              className='focuser-two'
+              alt='разбитое авто'
+              style={{ maxWidth: 250, bottom: -50, left: 0, position: 'absolute' }}
+              src={handHummerImg}
+            />
+          </div>
+        }
         action={
           <Link href='https://vk.com/tapoLom'>
             Наше сообщество

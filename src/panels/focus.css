@@ -1,0 +1,43 @@
+@keyframes changeFocusOne {
+  0% {
+    filter: blur(0);
+  }
+
+  25% {
+    filter: blur(5px);
+  }
+
+  50% {
+    filter: blur(5px);
+  }
+
+  100% {
+    filter: blur(0px);
+  }
+}
+
+@keyframes changeFocusTwo {
+  0% {
+    filter: blur(5px);
+  }
+
+  25% {
+    filter: blur(0px);
+  }
+
+  50% {
+    filter: blur(0px);
+  }
+
+  100% {
+    filter: blur(5px);
+  }
+}
+
+.focuser-one {
+  animation: changeFocusOne 3.5s infinite;
+}
+
+.focuser-two {
+  animation: changeFocusTwo 3.5s infinite;
+}

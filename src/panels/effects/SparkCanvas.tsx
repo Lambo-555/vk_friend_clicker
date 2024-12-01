@@ -24,7 +24,7 @@ export class DamageText {
 
   public update(): void {
     this.posY += this.velocityY;
-    this.opacity -= 0.01; // Adjust the opacity decrement rate
+    this.opacity -= 0.01;
   }
 
   public draw(): void {
