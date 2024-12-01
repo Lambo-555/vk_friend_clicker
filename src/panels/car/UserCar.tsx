@@ -11,6 +11,7 @@ import { SparkCanvas, SparkManager } from '../effects/SparkCanvas';
 import { getCarImageById } from '../images';
 import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 import graffity from '../../assets/graffity.png';
+import '../focus.css';
 
 // TODO добавить отображение инструмента, добавить учет инструмента при тапах по автомобилю, показывать состояние инструмента
 
@@ -139,13 +140,15 @@ export const UserCar: FC<UserCarProps> = ({ id, setCurrentModal }) => {
         <div
           style={{
             position: 'relative',
+            display: 'flex',
+            justifyContent: 'center'
           }}
         >
           <img
-            style={{ position: 'absolute', filter: 'blur(2px)', top: -130, left: 0, zIndex: 0 }}
+            style={{ position: 'absolute', filter: 'blur(5px)', top: -100, zIndex: 0, maxWidth: 400 }}
             src={graffity}
             alt={`Image ${graffity}`}
-            className={`image ${clickCount > 0 ? 'bright' : ''}`}
+            className={(userCar?.state || 0) <= 10 ? 'focuser-one' : ''}
           />
           <div
             className={`image-container ${clickCount > 0 ? 'active' : ''}`}
@@ -165,7 +168,9 @@ export const UserCar: FC<UserCarProps> = ({ id, setCurrentModal }) => {
               style={{ userSelect: 'none' }}
               src={getCarImageById(userCar?.car?.id || 1, currentCarImgIndex)}
               alt={`Image ${currentCarImgIndex}`}
-              className={`image ${clickCount > 0 ? 'bright' : ''}`}
+              className={
+                `image ${clickCount > 0 ? 'bright' : ''} ` + ((userCar?.state || 0) <= 10 ? 'focuser-two' : '')
+              }
             />
           </div>
         </div>

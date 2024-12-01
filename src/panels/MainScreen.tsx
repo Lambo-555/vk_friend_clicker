@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect, useState, } from 'react';
 import { Button, ButtonGroup, Div, Link, NavIdProps, Panel, PanelHeader, Placeholder, Separator, Snackbar } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28PaymentCardOutline, Icon28StarCircleFillBlue, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline, Icon28Cards2Outline, Icon28CarOutline } from '@vkontakte/icons';
+import { Icon20DiamondOutline, Icon24HammerOutline, Icon24WarningTriangleOutline, Icon28AccessibilityOutline, Icon28PaymentCardOutline, Icon28StarCircleFillBlue, Icon28ImageFilterOutline, Icon28MoneyWadOutline, Icon28ShoppingCartOutline, Icon28UserAddOutline, Icon28Cards2Outline, Icon28CarOutline } from '@vkontakte/icons';
 import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../routes';
 import vkBridge, { EAdsFormats } from '@vkontakte/vk-bridge';
 import { UserEntity } from '../utils/types';
@@ -251,6 +251,9 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
               </Button>
               <Button before={<Icon28PaymentCardOutline />} onClick={handlePayment} size="l" appearance="neutral" stretched>
                 Товары за голоса
+              </Button>
+              <Button disabled before={<Icon28ImageFilterOutline />} size="s" appearance="neutral" stretched>
+                Уххууу, скины! (В процессе)
               </Button>
             </ButtonGroup>
 
