@@ -7,11 +7,15 @@ import vkBridge, { EAdsFormats } from '@vkontakte/vk-bridge';
 import { UserEntity } from '../utils/types';
 import { ApiService } from '../utils/ApiService';
 import handHummerImg from '../assets/handhummer.png';
-import carImage from '../assets/1/1.png';
 import { moneyShorter } from '../utils/transformVKBridgeAdaptivity';
 import { BuyCreditButton } from './utils';
+import { getCarImageById } from './images';
 import './focus.css';
 
+const randomCarImageUrl = getCarImageById(
+  Math.round(Math.random()*3 + 1),
+  Math.round(Math.random()*6 + 1),
+)
 export interface MainScreenProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
   setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
@@ -20,6 +24,7 @@ export interface MainScreenProps extends NavIdProps {
 export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal }) => {
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const routeNavigator = useRouteNavigator();
+
 
   const openSnackbar = (message?: string, icon?: ReactNode) => {
     setPopout(
@@ -180,7 +185,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
                 bottom: 0,
                 position: 'absolute',
               }}
-              src={carImage}
+              src={randomCarImageUrl}
               alt="car"
             />
             <img
