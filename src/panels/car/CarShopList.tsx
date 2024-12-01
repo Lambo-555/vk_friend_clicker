@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { Button, Card, Div, Flex, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Snackbar, Spinner } from '@vkontakte/vkui';
+import { Button, Card, Div, Flex, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Spinner } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import bridge from '@vkontakte/vk-bridge';
 import { Icon20DiamondOutline } from '@vkontakte/icons';

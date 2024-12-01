@@ -31,6 +31,8 @@ export const DEFAULT_MODALS = {
   MARKET_MODAL: 'MARKET_MODAL',
   PAYMENT_MODAL: 'PAYMENT_MODAL',
   BUY_CAR_MODAL: 'BUY_CAR_MODAL',
+  SELL_CAR_MODAL: 'SELL_CAR_MODAL',
+  USER_CAR_DESTROYED: 'USER_CAR_DESTROYED',
 } as const;
 
 export const routes = RoutesConfig.create([

@@ -15,6 +15,8 @@ import { UserToolList } from './panels/tool/UserToolList';
 import { CarShopList } from './panels/car/CarShopList';
 import { PaymentModal } from './modals/Payment.modal';
 import { BuyCarModal } from './modals/BuyCar.modal';
+import { SellCarModal } from './modals/SellCar.modal';
+import { DestroyCarModal } from './modals/DestroyCar.modal';
 
 export const App = () => {
   const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME } = useActiveVkuiLocation();
@@ -56,9 +58,10 @@ export const App = () => {
       <BuyOnboarding id={DEFAULT_MODALS.BUY_3} setCurrentModal={setCurrentModal} />
       <InviteOnboarding id={DEFAULT_MODALS.INVITE_4} setCurrentModal={setCurrentModal} />
       <AdsOnboarding id={DEFAULT_MODALS.ADS_5} setCurrentModal={setCurrentModal} />
-      <AdsOnboarding id={DEFAULT_MODALS.ADS_5} setCurrentModal={setCurrentModal} />
       <PaymentModal id={DEFAULT_MODALS.PAYMENT_MODAL} setCurrentModal={setCurrentModal} setPopout={setPopout} />
       <BuyCarModal id={DEFAULT_MODALS.BUY_CAR_MODAL} setCurrentModal={setCurrentModal} />
+      <SellCarModal id={DEFAULT_MODALS.SELL_CAR_MODAL} setCurrentModal={setCurrentModal} />
+      <DestroyCarModal id={DEFAULT_MODALS.USER_CAR_DESTROYED} setCurrentModal={setCurrentModal} />
     </ModalRoot>
   );
 
@@ -68,8 +71,8 @@ export const App = () => {
         <View activePanel={activePanel}>
           <MainScreen id={DEFAULT_VIEW_PANELS.MAIN_SCREEN} setPopout={setPopout} setCurrentModal={setCurrentModal} />
           <CarShopList id={DEFAULT_VIEW_PANELS.CAR_SHOP_LIST} setCurrentModal={setCurrentModal} />
-          <UserCarList id={DEFAULT_VIEW_PANELS.USER_CAR_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
-          <UserCar id={DEFAULT_VIEW_PANELS.USER_CAR} setPopout={setPopout} setCurrentModal={setCurrentModal} />
+          <UserCarList id={DEFAULT_VIEW_PANELS.USER_CAR_LIST} setCurrentModal={setCurrentModal} />
+          <UserCar id={DEFAULT_VIEW_PANELS.USER_CAR} setCurrentModal={setCurrentModal} />
           <ToolShopList id={DEFAULT_VIEW_PANELS.TOOL_SHOP_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
           <UserToolList id={DEFAULT_VIEW_PANELS.USER_TOOL_LIST} setPopout={setPopout} setCurrentModal={setCurrentModal} />
         </View>

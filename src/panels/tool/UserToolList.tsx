@@ -163,9 +163,9 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout, setCurrentM
               maxHeight={250}
               header={
                 <ContentCard
-                  header={`Молот: ${userToolData?.tool?.name} (${userToolData?.id})`}
+                  header={`Молот: ${userToolData?.tool?.name}`}
                   caption={`Состояние: ${userToolData?.state}`}
-                  text={`Кредиты: ${moneyShorter(userToolData?.tool?.price || 0)}`}
+                  text={`💎: ${moneyShorter(userToolData?.tool?.price || 0)}`}
                 />
               }
               key={userToolData.id}
@@ -190,7 +190,7 @@ export const UserToolList: FC<UserToolListProps> = ({ id, setPopout, setCurrentM
                       <Button
                         disabled={calcUpgradePrice(userToolData) > (userData?.credits || 1)}
                         before={<Icon24ArrowUp />}
-                        after={<Counter> -{moneyShorter(calcUpgradePrice(userToolData))} кред </Counter>}
+                        after={<Counter> -{moneyShorter(calcUpgradePrice(userToolData))}💎 </Counter>}
                         appearance='overlay'
                         loading={isLoading}
                         size="m"

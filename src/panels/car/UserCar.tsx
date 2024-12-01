@@ -1,24 +1,24 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, FormItem, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Progress, SimpleCell, Snackbar } from '@vkontakte/vkui';
+import { FC, useEffect, useState } from 'react';
+import { Button, FormItem, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder, Progress, SimpleCell } from '@vkontakte/vkui';
 import { useParams, useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import bridge from '@vkontakte/vk-bridge';
 import './ImageSwitcher.css';
-import { Icon20CheckCircleFillGreen, Icon20CupOutline, Icon20DiamondOutline, Icon24HammerOutline } from '@vkontakte/icons';
-import { DEFAULT_VIEW_PANELS } from '../../routes';
+import { Icon20CupOutline, Icon20DiamondOutline, Icon24HammerOutline } from '@vkontakte/icons';
+import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../../routes';
 import { ApiService } from '../../utils/ApiService';
 import { UserCarEntity, UserEntity } from '../../utils/types';
 import { SparkCanvas, SparkManager } from '../effects/SparkCanvas';
 import { getCarImageById } from '../images';
 import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
+import graffity from '../../assets/graffity.png';
 
 // TODO добавить отображение инструмента, добавить учет инструмента при тапах по автомобилю, показывать состояние инструмента
 
-export interface UserCarListProps extends NavIdProps {
-  setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
+export interface UserCarProps extends NavIdProps {
   setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
 }
 
-export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
+export const UserCar: FC<UserCarProps> = ({ id, setCurrentModal }) => {
   const [userCar, setUserCar] = useState<UserCarEntity | null>();
   const [damage, setDamage] = useState<number>(0);
   const [userData, setUserData] = useState<UserEntity | null>(null);
@@ -34,19 +34,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
 
   const params = useParams<'userCarId'>();
   const userCarIdStr: string | undefined = params?.userCarId;
-
-  const openSnackbar = (message?: string, icon?: ReactNode) => {
-    setPopout(
-      <Snackbar
-        onClick={() => setPopout(null)}
-        duration={2000}
-        onClose={() => setPopout(null)}
-        before={icon ? icon : null}
-      >
-        {message || 'Что-то пошло не так'}
-      </Snackbar>
-    );
-  };
 
   useEffect(() => {
     const canvasElement = document.getElementById("world") as HTMLCanvasElement;
@@ -104,10 +91,6 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       return;
     }
     if ((userCar?.state || 0) <= 0) {
-      openSnackbar(
-        `Модель ${userCar?.car?.name || 'basecar'} полностью уничтожена`,
-        <Icon20CheckCircleFillGreen />
-      );
       return;
     }
 
@@ -129,6 +112,10 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       if (sparkManager) {
         sparkManager.handleClick(e, damageValue);
       }
+      if ((result?.state || 0) <= 0) {
+        setCurrentModal(DEFAULT_MODALS.USER_CAR_DESTROYED);
+        return;
+      }
     }
   }
 
@@ -138,6 +125,7 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
     }
     const result: UserCarEntity = await ApiService.exchangeUserCar(userData.id!, Number(userCarId));
     if (result) {
+      setCurrentModal(DEFAULT_MODALS.SELL_CAR_MODAL);
       routeNavigator.push(`/${DEFAULT_VIEW_PANELS.USER_CAR_LIST}`)
     }
   }
@@ -149,25 +137,37 @@ export const UserCar: FC<UserCarListProps> = ({ id, setPopout }) => {
       </PanelHeader>
       <Placeholder stretched>
         <div
-          className={`image-container ${clickCount > 0 ? 'active' : ''}`}
           style={{
-            transform: `translate(${xOffset}px, ${yOffset}px) rotate(${(xOffset - yOffset) / 2}deg)`,
-            transition: 'transform 0.5s ease-in-out',
-            maxWidth: 500,
-            overflow: 'hidden',
+            position: 'relative',
           }}
         >
-          <canvas
-            id='world'
-            style={{ position: 'absolute', zIndex: 99999 }}
-            onClick={(e: any) => handleDamageUserCarClick(userCar?.id || 0, e)}
-          />
           <img
-            style={{ userSelect: 'none' }}
-            src={getCarImageById(userCar?.car?.id || 1, currentCarImgIndex)}
-            alt={`Image ${currentCarImgIndex}`}
+            style={{ position: 'absolute', filter: 'blur(2px)', top: -130, left: 0, zIndex: 0 }}
+            src={graffity}
+            alt={`Image ${graffity}`}
             className={`image ${clickCount > 0 ? 'bright' : ''}`}
           />
+          <div
+            className={`image-container ${clickCount > 0 ? 'active' : ''}`}
+            style={{
+              transform: `translate(${xOffset}px, ${yOffset}px) rotate(${(xOffset - yOffset) / 2}deg)`,
+              transition: 'transform 0.5s ease-in-out',
+              maxWidth: 500,
+              overflow: 'hidden',
+            }}
+          >
+            <canvas
+              id='world'
+              style={{ position: 'absolute', zIndex: 99999 }}
+              onClick={(e: any) => handleDamageUserCarClick(userCar?.id || 0, e)}
+            />
+            <img
+              style={{ userSelect: 'none' }}
+              src={getCarImageById(userCar?.car?.id || 1, currentCarImgIndex)}
+              alt={`Image ${currentCarImgIndex}`}
+              className={`image ${clickCount > 0 ? 'bright' : ''}`}
+            />
+          </div>
         </div>
         <Group
           header={<Header>Модель: "{userCar?.car?.name}" {(userCar?.state || 0) <= 0 ? '(Потрачено)' : ''}</Header>}

@@ -3,25 +3,29 @@ import { Button, ButtonGroup, ModalCard, Spacing } from "@vkontakte/vkui"
 import React, { useEffect, useState } from "react"
 
 const headerTextPull = [
-    "Наконец-то избавился от этого хлама, в магазине стало светлее",
-    "Продал этот хлам и почувствовал, что стало легче на душе",
-    "Хлам ушел из моего магазина, как камень с моей души",
-    "Спасибо, что купил это, вот я бы не взял, но ты молодец",
-    "Молодец, респект от разработчиков, красавчик",
-    "Упс, я это не хотел продавать, ххммм... Что же делать то теперь...",
+    "Экран стал чуть жирнее",
+    "Вещица явно в хлам, пятничный",
+    "Серверу поплохело, столько тапов",
+    "Не видно, но экран чуть вогнут",
+    "4млрд лет эволюции и вот это вот...",
+    "Респект от разработчиков, молодец"
 ];
 
 const okTextPull = [
-    "Ну скидка же была",
-    "Надо было, наверное",
-    "Не удержался, бывает",
-    "Поддержал бизнес, ...твой",
-    "Буду ремонтировать, или нет",
-    "Вдруг пригодится",
-    "Новая коллекция, да?"
+    "Это я сделал!",
+    "Выпустите победителя",
+    "Что произойдет если нажать эту кнопку",
+    "Я устал, я ухожу",
+    "На что я трачу свою жизнь",
+    "Надо бы молоток купить",
+    "А в этом есть смысл",
+    "Вы точно ВК-приложение?",
+    "Лев-тигр стайл вин",
+    "Тут тесно, помогите, где выход!",
+    "Ну я же красавчик",
 ];
 
-export const BuyCarModal = ({ id, setCurrentModal }: { id: string, setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
+export const DestroyCarModal = ({ id, setCurrentModal }: { id: string, setCurrentModal: React.Dispatch<React.SetStateAction<any>> }) => {
     const [okText, setOkText] = useState<string>('Отлично');
     const [headerText, setHeaderText] = useState<string>('Отлично');
     
@@ -39,7 +43,7 @@ export const BuyCarModal = ({ id, setCurrentModal }: { id: string, setCurrentMod
             onClose={() => setCurrentModal(null)}
 
             icon={<Icon28CarOutline />}
-            header="Поздравляем с покупкой! Пара слов от продавца:"
+            header="Неплохо потапано. Итоги:"
             subheader={headerText}
             actions={
                 <React.Fragment>

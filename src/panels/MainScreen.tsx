@@ -13,8 +13,8 @@ import { getCarImageById } from './images';
 import './focus.css';
 
 const randomCarImageUrl = getCarImageById(
-  Math.round(Math.random()*3 + 1),
-  Math.round(Math.random()*6 + 1),
+  Math.round(Math.random() * 3 + 1),
+  Math.round(Math.random() * 6 + 1),
 )
 export interface MainScreenProps extends NavIdProps {
   setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
@@ -23,6 +23,7 @@ export interface MainScreenProps extends NavIdProps {
 
 export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal }) => {
   const [userData, setUserData] = useState<UserEntity | null>(null);
+  const [needUpdate, setNeedUpdate] = useState<boolean>(false);
   const routeNavigator = useRouteNavigator();
 
 
@@ -79,7 +80,7 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       }
     }
     getUserData();
-  }, [])
+  }, [needUpdate])
 
   const handlePayment = () => setCurrentModal(DEFAULT_MODALS.PAYMENT_MODAL);
   const handleGoToCarShop = () => routeNavigator.push(`/${DEFAULT_VIEW_PANELS.CAR_SHOP_LIST}`);
@@ -95,9 +96,10 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       if (adsShow?.result && userData?.id) {
         const isSuccess = await ApiService.addInviteBonus(userData.id);
         if (isSuccess) {
+          setNeedUpdate(!needUpdate);
           setUserData(isSuccess);
           openSnackbar(
-            `Кредиты за рекламу: ${250}`,
+            `💎 за рекламу: ${250}`,
             <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
           )
           console.log('adsShow:', adsShow);
@@ -118,9 +120,10 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       if (toFavorites?.result && userData?.id) {
         const isBonus = await ApiService.addInviteBonus(userData.id);
         if (isBonus) {
+          setNeedUpdate(!needUpdate);
           setUserData(isBonus);
           openSnackbar(
-            `Спасибо! Ваши доп.кредиты: ${250}`,
+            `Спасибо! Ваши 💎: ${250}`,
             <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
           )
           console.log('toFavorites:', toFavorites);
@@ -140,9 +143,10 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
       if (userListData && userData?.id) {
         const isBonus = await ApiService.addInviteBonus(userData.id);
         if (isBonus) {
+          setNeedUpdate(!needUpdate);
           setUserData(isBonus);
           openSnackbar(
-            `Вы получили кредиты: ${250}`,
+            `Вы получили 💎: ${250}`,
             <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
           )
           console.log('userListData.success:', userListData.success);
@@ -210,7 +214,8 @@ export const MainScreen: FC<MainScreenProps> = ({ id, setPopout, setCurrentModal
               gap="m"
               stretched
             >
-              <Button before={<Icon28ShoppingCartOutline />} onClick={handleGoToCarShop} size="l" appearance="accent" stretched>
+              <Button
+                before={<Icon28ShoppingCartOutline />} onClick={handleGoToCarShop} size="l" appearance="accent" stretched>
                 Свалка
               </Button>
               <Button before={<Icon28CarOutline />} onClick={handleGoToUserCarList} size="l" appearance="accent" stretched>

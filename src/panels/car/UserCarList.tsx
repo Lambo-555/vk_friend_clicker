@@ -1,9 +1,9 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
-import { Button, ButtonGroup, ContentCard, Div, Flex, FormItem, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Progress, SimpleCell, Snackbar } from '@vkontakte/vkui';
+import { FC, useEffect, useState } from 'react';
+import { Button, ButtonGroup, ContentCard, Div, Flex, FormItem, Group, Header, NavIdProps, Panel, PanelHeader, PanelHeaderBack, Progress, SimpleCell } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import bridge from '@vkontakte/vk-bridge';
 import { Icon28ShoppingCartOutline, Icon20DiamondOutline, Icon24HammerOutline, Icon20CupOutline } from '@vkontakte/icons';
-import { DEFAULT_VIEW_PANELS } from '../../routes';
+import { DEFAULT_MODALS, DEFAULT_VIEW_PANELS } from '../../routes';
 import { ApiService } from '../../utils/ApiService';
 import { UserCarEntity, UserEntity } from '../../utils/types';
 import { getCarImageById } from '../images';
@@ -11,11 +11,10 @@ import { moneyShorter } from '../../utils/transformVKBridgeAdaptivity';
 import { BuyCreditButton } from '../utils';
 
 export interface UserCarListProps extends NavIdProps {
-  setPopout: React.Dispatch<React.SetStateAction<ReactNode>>,
   setCurrentModal: React.Dispatch<React.SetStateAction<any>>,
 }
 
-export const UserCarList: FC<UserCarListProps> = ({ id, setPopout, setCurrentModal }) => {
+export const UserCarList: FC<UserCarListProps> = ({ id, setCurrentModal }) => {
   const [userCarList, setUserCarList] = useState<UserCarEntity[]>([]);
   const [userData, setUserData] = useState<UserEntity | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,19 +27,6 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout, setCurrentMod
   const calculateImgIndex = (num: number): number => {
     return Math.min(Math.floor(num / 100) + 1, 10);
   }
-
-  const openSnackbar = (message?: string, icon?: ReactNode) => {
-    setPopout(
-      <Snackbar
-        onClick={() => setPopout(null)}
-        duration={2000}
-        onClose={() => setPopout(null)}
-        before={icon ? icon : null}
-      >
-        {message || 'Что-то пошло не так'}
-      </Snackbar>
-    );
-  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -88,10 +74,11 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout, setCurrentMod
       setUserCarList(
         userCarList.filter(item => item.id !== userCarId)
       )
-      openSnackbar(
-        `Осколки модели "${result.car?.name || 'basecar'}" проданы за ${result.credits || 0}`,
-        <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
-      )
+      setCurrentModal(DEFAULT_MODALS.SELL_CAR_MODAL);
+      // openSnackbar(
+      //   `Осколки модели "${result.car?.name || 'basecar'}" проданы за ${result.credits || 0}`,
+      //   <Icon20DiamondOutline fill="var(--vkui--color_icon_positive)" />
+      // )
     }
   }
 
@@ -135,7 +122,7 @@ export const UserCarList: FC<UserCarListProps> = ({ id, setPopout, setCurrentMod
               header={
                 <>
                   <Group
-                    header={<Header>Модель: "{userCar?.car?.name}({userCar?.id || 0})" {(userCar?.state || 0) <= 0 ? '(Потрачено)' : ''}</Header>}
+                    header={<Header>Модель: "{userCar?.car?.name}" {(userCar?.state || 0) <= 0 ? '(Потрачено)' : ''}</Header>}
                     key={userCar?.id}
                     mode='plain'
                     separator='show'

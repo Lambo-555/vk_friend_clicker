@@ -65,7 +65,7 @@ export const BuyOnboarding = ({ id, setCurrentModal }: { id: string, setCurrentM
 
             icon={<Icon56DeleteOutlineIos />}
             header="А если я все сломаю?"
-            subheader="В этом суть! Покупай хлам за кредиты и ломай его для большей прибыли"
+            subheader="В этом суть! Покупай хлам за 💎 и ломай его для большей прибыли"
             actions={
                 <React.Fragment>
                     <Spacing size={16} />
@@ -114,7 +114,6 @@ export const AdsOnboarding = ({ id, setCurrentModal }: { id: string, setCurrentM
         <ModalCard
             id={id}
             onClose={() => setCurrentModal(null)}
-
             icon={<Icon56StopwatchOutline />}
             header="Что делать если я лев-тигр нет друзей?"
             subheader="Смотри рекламу, получай бонус и ищи друзей в нашем сообществе!"
